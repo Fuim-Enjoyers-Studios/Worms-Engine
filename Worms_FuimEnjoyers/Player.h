@@ -12,8 +12,6 @@ class Player : public Entity
 {
 public:
 
-	Player();
-
 	Player(const char* path, iPoint posi);
 	
 	virtual ~Player();

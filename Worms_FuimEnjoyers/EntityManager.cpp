@@ -63,15 +63,8 @@ Entity* EntityManager::CreateEntity(EntityType type, const char* path, iPoint po
 	{
 
 	case EntityType::PLAYER:
-		if (path == 0)
-		{
-			entity = new Player();
-		}
-		else
-		{
-			entity = new Player(path, position);
-		}
-		break;
+
+		entity = new Player(path, position);
 
 	/*case EntityType::ITEM:
 		entity = new Item();
