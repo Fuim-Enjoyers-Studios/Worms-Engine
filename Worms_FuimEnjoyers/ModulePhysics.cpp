@@ -1,5 +1,5 @@
-#include "Globals.h"
 #include "Application.h"
+#include "Globals.h"
 #include "ModulePhysics.h"
 #include "math.h"
 
