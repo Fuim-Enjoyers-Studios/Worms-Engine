@@ -24,5 +24,14 @@ public:
 	bool CleanUp();
 
 public:
+	Animation* currentAnimation = nullptr;
+
+	Animation IdleAnimation;
+	Animation WalkRightAnimation;
+	Animation WalkLeftAnimation;
+	Animation JumpRightAnimation;
+	Animation JumpLeftAnimation;
+	Animation DeathAnimation;
+
 
 };
