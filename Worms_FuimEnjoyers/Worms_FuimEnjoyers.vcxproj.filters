@@ -34,6 +34,12 @@
     <ClCompile Include="ModuleSceneIntro.cpp">
       <Filter>Modules\Game</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleFonts.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDebug.cpp">
+      <Filter>Modules\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -76,6 +82,12 @@
       <Filter>Modules\Game</Filter>
     </ClInclude>
     <ClInclude Include="ModuleSceneIntro.h">
+      <Filter>Modules\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleFonts.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDebug.h">
       <Filter>Modules\Game</Filter>
     </ClInclude>
   </ItemGroup>
