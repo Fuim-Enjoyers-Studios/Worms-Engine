@@ -1,5 +1,6 @@
 #pragma once
 #include "Module.h"
+#include "Player.h"
 #include "Animation.h"
 #include "p2DynArray.h"
 #include "Globals.h"
@@ -43,7 +44,8 @@ public:
 
 	SDL_Texture* graphics;
 	SDL_Texture* background;
-	SDL_Texture* slime1;
+
+	Player* player1;
 
 	SDL_Texture* tex_light_tiny;
 	SDL_Texture* tex_light_medium;
