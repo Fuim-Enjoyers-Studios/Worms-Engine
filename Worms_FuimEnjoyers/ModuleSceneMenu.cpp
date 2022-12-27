@@ -30,6 +30,7 @@ bool ModuleSceneMenu::CleanUp()
 	LOG("Deleting background assets");
 	App->textures->Unload(bgtexture);
 	App->audio->PlayMusic("");
+	bgtexture = nullptr;
 	return true;
 }
 
