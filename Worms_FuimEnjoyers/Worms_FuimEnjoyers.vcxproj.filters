@@ -40,6 +40,12 @@
     <ClCompile Include="ModuleDebug.cpp">
       <Filter>Modules\Game</Filter>
     </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Modules\Game</Filter>
+    </ClCompile>
     <ClCompile Include="ModuleSceneMenu.cpp">
       <Filter>Modules\Game</Filter>
     </ClCompile>
@@ -93,8 +99,26 @@
     <ClInclude Include="ModuleDebug.h">
       <Filter>Modules\Game</Filter>
     </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Modules\Game</Filter>
+    </ClInclude>
     <ClInclude Include="ModuleSceneMenu.h">
       <Filter>Modules\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SString.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Defs.h">
+      <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
