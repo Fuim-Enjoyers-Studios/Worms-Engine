@@ -12,6 +12,7 @@
 #include "ModulePlayer.h"
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleSceneMenu.h"
 #include "ModuleFonts.h"
 #include "ModuleDebug.h"
 
@@ -25,6 +26,7 @@ public:
 	ModuleAudio* audio;
 	ModulePlayer* player;
 	ModuleSceneIntro* scene_intro;
+	ModuleSceneMenu* scene_Menu;
 	ModulePhysics* physics;
 	ModuleFonts* fonts;
 	ModuleDebug* debug;

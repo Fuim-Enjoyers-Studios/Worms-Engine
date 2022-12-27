@@ -40,6 +40,9 @@
     <ClCompile Include="ModuleDebug.cpp">
       <Filter>Modules\Game</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleSceneMenu.cpp">
+      <Filter>Modules\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -88,6 +91,9 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModuleDebug.h">
+      <Filter>Modules\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSceneMenu.h">
       <Filter>Modules\Game</Filter>
     </ClInclude>
   </ItemGroup>

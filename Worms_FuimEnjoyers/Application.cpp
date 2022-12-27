@@ -8,7 +8,8 @@ Application::Application()
 	input = new ModuleInput(this);
 	audio = new ModuleAudio(this, true);
 	player = new ModulePlayer(this);
-	scene_intro = new ModuleSceneIntro(this);
+	scene_intro = new ModuleSceneIntro(this,false);
+	scene_Menu = new ModuleSceneMenu(this,true);
 	physics = new ModulePhysics(this);
 	fonts = new ModuleFonts(this);
 	debug = new ModuleDebug(this);
@@ -27,6 +28,7 @@ Application::Application()
 	AddModule(debug);
 	// Scenes
 	AddModule(scene_intro);
+	AddModule(scene_Menu);
 	
 	// Player
 	AddModule(player);
