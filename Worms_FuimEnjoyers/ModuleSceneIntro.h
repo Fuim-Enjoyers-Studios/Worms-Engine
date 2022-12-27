@@ -32,7 +32,7 @@ struct Light
 class ModuleSceneIntro : public Module
 {
 public:
-	ModuleSceneIntro(Application* app, bool start_enabled = true);
+	ModuleSceneIntro(bool start_enabled = true);
 	~ModuleSceneIntro();
 
 	bool Start();
@@ -42,6 +42,8 @@ public:
 public:
 
 	SDL_Texture* graphics;
+	SDL_Texture* background;
+	SDL_Texture* slime1;
 
 	SDL_Texture* tex_light_tiny;
 	SDL_Texture* tex_light_medium;

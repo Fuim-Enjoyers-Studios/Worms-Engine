@@ -5,7 +5,7 @@
 class ModuleSceneMenu : public Module
 {
 public:
-	ModuleSceneMenu(Application* app, bool start_enabled = true);
+	ModuleSceneMenu(bool start_enabled = true);
 	~ModuleSceneMenu();
 
 	bool Start();

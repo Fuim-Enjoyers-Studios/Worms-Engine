@@ -22,7 +22,7 @@ Player::~Player() {
 bool Player::Start() {
 
 	//initilize textures
-	//texture = App->textures->Load(texturePath);
+	texture = App->textures->Load(texturePath);
 	return true;
 }
 

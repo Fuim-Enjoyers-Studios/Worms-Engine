@@ -4,7 +4,7 @@
 
 
 
-ModuleSceneMenu::ModuleSceneMenu(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleSceneMenu::ModuleSceneMenu(bool start_enabled) : Module(start_enabled)
 {
 
 }

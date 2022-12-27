@@ -15,6 +15,7 @@
 #include "ModuleSceneMenu.h"
 #include "ModuleFonts.h"
 #include "ModuleDebug.h"
+#include "EntityManager.h"
 
 class Application
 {
@@ -30,6 +31,7 @@ public:
 	ModulePhysics* physics;
 	ModuleFonts* fonts;
 	ModuleDebug* debug;
+	EntityManager* entityManager;
 
 private:
 
@@ -48,3 +50,5 @@ private:
 
 	void AddModule(Module* mod);
 };
+
+extern Application* App;

@@ -3,7 +3,7 @@
 #include "ModulePhysics.h"
 #include "math.h"
 
-ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModulePhysics::ModulePhysics(bool start_enabled) : Module(start_enabled)
 {
 	debug = true;
 }

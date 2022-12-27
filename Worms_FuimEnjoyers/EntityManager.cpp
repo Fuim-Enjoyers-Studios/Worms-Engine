@@ -6,7 +6,7 @@
 #include "Defs.h"
 #include "log.h"
 
-EntityManager::EntityManager(Application* app, bool start_enabled) : Module(app, start_enabled)
+EntityManager::EntityManager(bool start_enabled) : Module(start_enabled)
 {
 	
 }
