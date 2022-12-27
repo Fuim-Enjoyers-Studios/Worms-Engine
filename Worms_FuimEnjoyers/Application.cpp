@@ -7,7 +7,6 @@ Application::Application()
 	textures = new ModuleTextures();
 	input = new ModuleInput();
 	audio = new ModuleAudio(true);
-	player = new ModulePlayer();
 	scene_intro = new ModuleSceneIntro(false);
 	scene_Menu = new ModuleSceneMenu(true);
 	physics = new ModulePhysics();
@@ -30,9 +29,6 @@ Application::Application()
 	// Scenes
 	AddModule(scene_intro);
 	AddModule(scene_Menu);
-	
-	// Player
-	AddModule(player);
 
 	AddModule(debug);
 	//renderer the last one always

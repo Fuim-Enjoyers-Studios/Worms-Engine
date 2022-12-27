@@ -20,7 +20,7 @@ public:
 	bool CleanUp();
 
 	// Additional methods
-	Entity* CreateEntity(EntityType type);
+	Entity* CreateEntity(EntityType type, const char* path = 0, iPoint position = { 0,0 });
 
 	void DestroyEntity(Entity* entity);
 

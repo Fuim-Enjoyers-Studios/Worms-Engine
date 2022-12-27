@@ -2,6 +2,7 @@
 #define __PLAYER_H__
 
 #include "Entity.h"
+#include "Animation.h"
 #include "p2Point.h"
 #include "SDL/include/SDL.h"
 
@@ -31,6 +32,17 @@ private:
 	iPoint pos;
 	SDL_Texture* texture;
 	const char* texturePath;
+	//animation stuff
+	Animation* currentAnimation = nullptr;
+
+	Animation IdleAnimation;
+	Animation WalkRightAnimation;
+	Animation WalkLeftAnimation;
+	Animation JumpRightAnimation;
+	Animation JumpLeftAnimation;
+	Animation DeathAnimation;
+
+	int deathSound;
 
 };
 

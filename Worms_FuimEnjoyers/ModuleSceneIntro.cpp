@@ -17,10 +17,13 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
-
+	App->audio->PlayMusic("Assets/Audio/backgroundMusic.ogg");
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-	slime1 = App->textures->Load("Assets/Textures/spriteplayer1.png");
 	//background = App->textures->Load("Assets/Textures/intro.png");
+	
+	//creating 1 player
+	player1 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer1.png", { 500,200 });
+
 	return ret;
 }
 
@@ -28,7 +31,7 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-
+	App->audio->PlayMusic("");
 	return true;
 }
 
@@ -55,9 +58,7 @@ update_status ModuleSceneIntro::Update()
 
 
 	//App->renderer->Blit(background, 0, 0);
-	SDL_Rect rect = App->player->currentAnimation->GetCurrentFrame();
-	App->renderer->Blit(slime1, 500, 300, &rect);
-	App->player->currentAnimation->Update();
+
 
 	return UPDATE_CONTINUE;
 }

@@ -28,9 +28,6 @@
     <ClCompile Include="ModulePhysics.cpp">
       <Filter>Modules\Game</Filter>
     </ClCompile>
-    <ClCompile Include="ModulePlayer.cpp">
-      <Filter>Modules\Game</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleSceneIntro.cpp">
       <Filter>Modules\Game</Filter>
     </ClCompile>
@@ -85,9 +82,6 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModulePhysics.h">
-      <Filter>Modules\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="ModulePlayer.h">
       <Filter>Modules\Game</Filter>
     </ClInclude>
     <ClInclude Include="ModuleSceneIntro.h">

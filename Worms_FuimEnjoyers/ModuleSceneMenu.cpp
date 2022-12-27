@@ -28,7 +28,8 @@ bool ModuleSceneMenu::Start()
 bool ModuleSceneMenu::CleanUp()
 {
 	LOG("Deleting background assets");
-
+	App->textures->Unload(bgtexture);
+	App->audio->PlayMusic("");
 	return true;
 }
 
@@ -37,9 +38,8 @@ update_status ModuleSceneMenu::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		App->audio->PlayFx(entrysound);
-		App->audio->PlayMusic("");
-		App->scene_intro->Enable();
 		this->Disable();
+		App->scene_intro->Enable();
 	}
 
 
