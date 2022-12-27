@@ -28,6 +28,8 @@ bool ModuleSceneMenu::Start()
 bool ModuleSceneMenu::CleanUp()
 {
 	LOG("Deleting background assets");
+	App->textures->Unload(bgtexture);
+	bgtexture = nullptr;
 
 	return true;
 }
