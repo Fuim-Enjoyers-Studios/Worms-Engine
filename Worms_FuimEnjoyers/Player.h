@@ -41,6 +41,8 @@ private:
 	Animation DeathAnimation;
 
 	int deathSound;
+	int state;
+	bool facing;
 
 };
 

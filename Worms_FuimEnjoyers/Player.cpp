@@ -4,6 +4,13 @@
 #include "Log.h"
 #include "p2Point.h"
 
+#define FACING_LEFT false
+#define FACING_RIGHT true
+#define IDLE 1
+#define WALK 2
+#define JUMPING 3
+#define DYING 4
+
 Player::Player(const char* path, iPoint posi) : Entity(EntityType::PLAYER)
 {
 	IdleAnimation.PushBack({ 0 * 32,0 * 32,32,32 });
@@ -82,7 +89,12 @@ bool Player::Start() {
 bool Player::Update()
 {
 	int speed = 5;
-	currentAnimation = &IdleAnimation;
+
+	if (state != DYING)
+	{
+		state = IDLE;
+		DeathAnimation.Reset();
+	}
 	////L02: DONE 4: modify the position of the player using arrow keys and render the texture
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
@@ -94,19 +106,58 @@ bool Player::Update()
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		currentAnimation = &WalkLeftAnimation;
+		state = WALK;
+		facing = FACING_LEFT;
 		position.x -= speed;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		currentAnimation = &WalkRightAnimation;
+		state = WALK;
+		facing = FACING_RIGHT;
 		position.x += speed;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		currentAnimation = &DeathAnimation;
+		state = DYING;
 		App->audio->PlayFx(deathSound);
+	}
+
+	switch (state)
+	{
+	case IDLE:
+
+		currentAnimation = &IdleAnimation;
+
+		break;
+	case WALK:
+		if (facing == FACING_LEFT)
+		{
+			currentAnimation = &WalkLeftAnimation;
+		}
+		else if (facing == FACING_RIGHT)
+		{
+			currentAnimation = &WalkRightAnimation;
+		}
+		break;
+	case JUMPING:
+		if (facing == FACING_LEFT)
+		{
+			currentAnimation = &JumpLeftAnimation;
+		}
+		else if (facing == FACING_RIGHT)
+		{
+			currentAnimation = &JumpRightAnimation;
+		}
+		break;
+	case DYING:
+
+		currentAnimation = &DeathAnimation;
+
+		break;
+	default:
+		break;
+
 	}
 
 	//blit slime
