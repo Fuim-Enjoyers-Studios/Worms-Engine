@@ -63,12 +63,11 @@ Entity* EntityManager::CreateEntity(EntityType type, const char* path, iPoint po
 	{
 
 	case EntityType::PLAYER:
-
 		entity = new Player(path, position);
-
-	/*case EntityType::ITEM:
-		entity = new Item();
-		break;*/
+		break;
+	case EntityType::PROJECTILE:
+		entity = new Projectile(path, iPoint(position.x + 16, position.y + 16));
+		break;
 
 	default: break;
 	}

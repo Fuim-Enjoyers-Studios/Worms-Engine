@@ -32,6 +32,16 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 	App->audio->PlayMusic("");
+
+	/*p2List_item<Projectile*>* projectileItem = projectiles.getFirst();
+
+	while (projectileItem != NULL)
+	{
+		delete projectileItem->data;
+		projectileItem->data = NULL;
+		projectileItem = projectileItem->next;
+	}
+	projectiles.clear();*/
 	return true;
 }
 
@@ -55,6 +65,13 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->renderer->camera.x += speed;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
+	{
+		Projectile* projectile = (Projectile*)App->entityManager->CreateEntity(EntityType::PROJECTILE, "Assets/Textures/shotplayer1.png", player1->position);
+		projectiles.add(projectile);
+	}
+
 
 
 	//App->renderer->Blit(background, 0, 0);

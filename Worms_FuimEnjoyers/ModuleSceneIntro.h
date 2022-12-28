@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Player.h"
+#include "Projectile.h"
 #include "Animation.h"
 #include "p2DynArray.h"
 #include "Globals.h"
@@ -58,4 +59,6 @@ public:
 	p2DynArray<Light> lights;
 
 	uint player_lose_fx;
+
+	p2List<Projectile*> projectiles;
 };
