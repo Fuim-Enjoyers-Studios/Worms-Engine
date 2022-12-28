@@ -24,12 +24,14 @@ Application::Application()
 	AddModule(input);
 	AddModule(audio);
 	AddModule(fonts);
-	AddModule(debug);
 	// Scenes
 	AddModule(scene_intro);
 	
 	// Player
 	AddModule(player);
+
+	//Dbug info on screen
+	AddModule(debug);
 
 	//renderer the last one always
 	AddModule(renderer);
