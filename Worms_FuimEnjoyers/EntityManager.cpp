@@ -53,7 +53,7 @@ bool EntityManager::CleanUp()
 	return ret;
 }
 
-Entity* EntityManager::CreateEntity(EntityType type)
+Entity* EntityManager::CreateEntity(EntityType type, const char* path, iPoint position)
 {
 	Entity* entity = nullptr; 
 
@@ -63,8 +63,8 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	{
 
 	case EntityType::PLAYER:
-		entity = new Player();
-		break;
+
+		entity = new Player(path, position);
 
 	/*case EntityType::ITEM:
 		entity = new Item();
@@ -74,6 +74,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	}
 
 	// Created entities are added to the list
+	entity->Start();
 	AddEntity(entity);
 
 	return entity;
