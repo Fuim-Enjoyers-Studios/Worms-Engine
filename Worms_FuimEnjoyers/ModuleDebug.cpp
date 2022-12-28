@@ -80,7 +80,7 @@ update_status ModuleDebug::PostUpdate()
 			}
 			else if (element->data->GetShape() == ShapeType::RECTANGLE)
 			{
-				App->renderer->DrawQuad(element->data->pixelRect(), color_r, color_g, color_b);
+				App->renderer->DrawQuad(element->data->pixelRect(), color_r, color_g, color_b, 255U, false);
 			}
 		}
 		else if (element->data->ctype == ColliderType::SHOT) {
@@ -106,7 +106,7 @@ update_status ModuleDebug::PostUpdate()
 			}
 			else if (element->data->GetShape() == ShapeType::RECTANGLE)
 			{
-				App->renderer->DrawQuad(element->data->pixelRect(), color_r, color_g, color_b);
+				App->renderer->DrawQuad(element->data->pixelRect(), color_r, color_g, color_b, 255U, false);
 			}
 		}
 		else if (element->data->ctype == ColliderType::GRENADE) {
@@ -132,7 +132,7 @@ update_status ModuleDebug::PostUpdate()
 			}
 			else if (element->data->GetShape() == ShapeType::RECTANGLE)
 			{
-				App->renderer->DrawQuad(element->data->pixelRect(), color_r, color_g, color_b);
+				App->renderer->DrawQuad(element->data->pixelRect(), color_r, color_g, color_b, 255U, false);
 			}
 		}
 

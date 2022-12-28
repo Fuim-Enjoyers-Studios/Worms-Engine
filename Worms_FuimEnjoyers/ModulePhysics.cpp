@@ -181,6 +181,9 @@ PhysBody* ModulePhysics::CreateCircle(float pos_x, float pos_y, float rad, BodyT
 	body->coef_friction = 0.9f;
 	body->coef_restitution = 0.8f;
 
+	body->velocity.x = 0.0f;
+	body->velocity.y = 0.0f;
+
 	body->ctype = ColliderType::UNKNOWN;
 
 	world.Elements.add(body);
@@ -203,6 +206,10 @@ PhysBody* ModulePhysics::CreateRectangle(float pos_x, float pos_y, float w, floa
 	body->b = 10.0f;
 	body->coef_friction = 0.9f;
 	body->coef_restitution = 0.8f;
+
+	body->velocity.x = 0.0f;
+	body->velocity.y = 0.0f;
+
 
 	body->ctype = ColliderType::UNKNOWN;
 

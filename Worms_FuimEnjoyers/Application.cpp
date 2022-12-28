@@ -9,7 +9,7 @@ Application::Application()
 	audio = new ModuleAudio(true);
 	scene_intro = new ModuleSceneIntro(false);
 	scene_Menu = new ModuleSceneMenu(true);
-	physics = new ModulePhysics();
+	physics = new ModulePhysics(false);
 	fonts = new ModuleFonts();
 	debug = new ModuleDebug();
 	entityManager = new EntityManager();

@@ -72,6 +72,8 @@ Player::Player(const char* path, iPoint posi) : Entity(EntityType::PLAYER)
 
 	texturePath = path;
 	position = posi;
+	w = 32;
+	h = 32;
 }
 
 Player::~Player() {
@@ -83,12 +85,29 @@ bool Player::Start() {
 	//initilize textures
 	texture = App->textures->Load(texturePath);
 	deathSound = App->audio->LoadFx("Assets/Audio/deathSound.wav");
+	body = App->physics->CreateRectangle(	PIXEL_TO_METERS(position.x), 
+											PIXEL_TO_METERS(position.y + h),
+											PIXEL_TO_METERS(w),
+											PIXEL_TO_METERS(h),
+											BodyType::DYNAMIC);
+	// Set static properties of the ball
+	body->mass = 10.0f; // [kg]
+	body->surface = 1.0f; // [m^2]
+	body->cd = 0.4f; // [-]
+	body->cl = 1.2f; // [-]
+	body->b = 10.0f; // [...]
+	body->coef_friction = 0.9f; // [-]
+	body->coef_restitution = 0.8f; // [-]
+	//
+	//Set initial position and velocity of the ball
+	body->ctype = ColliderType::ENTITY;
+
 	return true;
 }
 
 bool Player::Update()
 {
-	int speed = 5;
+	int speed = PIXEL_TO_METERS(5);
 
 	if (state != DYING)
 	{
@@ -98,23 +117,23 @@ bool Player::Update()
 	////L02: DONE 4: modify the position of the player using arrow keys and render the texture
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		position.y -= speed;
+		body->position.y -= speed;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-		position.y += speed;
+		body->position.y += speed;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 		state = WALK;
 		facing = FACING_LEFT;
-		position.x -= speed;
+		body->position.x -= speed;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 		state = WALK;
 		facing = FACING_RIGHT;
-		position.x += speed;
+		body->position.x += speed;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
@@ -159,10 +178,13 @@ bool Player::Update()
 		break;
 
 	}
-
+	
+	//
+	position.x = METERS_TO_PIXELS(body->position.x);
+	position.y = METERS_TO_PIXELS(body->position.y) + h;
 	//blit slime
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
-	App->renderer->Blit(texture, position.x, position.y, &rect);
+	App->renderer->Blit(texture, position.x, SCREEN_HEIGHT - position.y, &rect);
 	currentAnimation->Update();
 
 	return true;

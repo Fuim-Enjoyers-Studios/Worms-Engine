@@ -45,6 +45,7 @@ update_status ModuleSceneMenu::Update()
 		App->audio->PlayFx(entrysound);
 		this->Disable();
 		App->scene_intro->Enable();
+		App->physics->Enable();
 	}
 
 	return UPDATE_CONTINUE;

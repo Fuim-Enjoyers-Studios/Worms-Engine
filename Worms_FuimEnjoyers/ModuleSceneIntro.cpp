@@ -22,7 +22,7 @@ bool ModuleSceneIntro::Start()
 	//background = App->textures->Load("Assets/Textures/intro.png");
 	
 	//creating 1 player
-	player1 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer1.png", { 500,200 });
+	player1 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer1.png", { METERS_TO_PIXELS(1), METERS_TO_PIXELS(3.5f) });
 
 	//create ground
 	PhysBody* ground = App->physics->CreateRectangle((0.0f)/2, (0.0f)/2, (30.0f)/2, (5.0f)/2, BodyType::STATIC);

@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "Animation.h"
+//#include "ModulePhysics.h"
 #include "p2Point.h"
 #include "SDL/include/SDL.h"
 
@@ -24,10 +25,16 @@ public:
 
 public:
 
-private:
+	PhysBody* getBody()
+	{
+		return body;
+	}
 
+private:
+	
 	//L02: DONE 1: Declare player parameters
 	iPoint pos;
+	int w, h;
 	SDL_Texture* texture;
 	const char* texturePath;
 	//animation stuff
@@ -39,6 +46,8 @@ private:
 	Animation JumpRightAnimation;
 	Animation JumpLeftAnimation;
 	Animation DeathAnimation;
+
+	PhysBody* body = nullptr;
 
 	int deathSound;
 	int state;
