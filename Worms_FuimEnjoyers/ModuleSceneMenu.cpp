@@ -21,6 +21,8 @@ bool ModuleSceneMenu::Start()
 	App->audio->PlayMusic("Assets/Audio/MenuTheme.wav");
 	entrysound = App->audio->LoadFx("Assets/Audio/EntryEnter.wav");
 	bgtexture = App->textures->Load("Assets/Textures/quecojones.png");
+	enter = App->textures->Load("Assets/Textures/PressEnter.png");
+	entertimer = 0;
 
 	return true;
 }
@@ -44,14 +46,20 @@ update_status ModuleSceneMenu::Update()
 		this->Disable();
 	}
 
-
 	return UPDATE_CONTINUE;
 
 }
 
 update_status ModuleSceneMenu::PostUpdate()
 {
-	App->renderer->Blit(bgtexture,0,0);
+	App->renderer->Blit(bgtexture,195,0);
+	if (entertimer == 70) {
+		entertimer = 0;
+	}
+	if (entertimer >= 30 && entertimer < 70) {
+		App->renderer->Blit(enter, 340, 580);
+	}
+	++entertimer;
 
 	return UPDATE_CONTINUE;
 }

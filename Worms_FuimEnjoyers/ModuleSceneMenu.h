@@ -15,6 +15,8 @@ public:
 
 private:
 	SDL_Texture* bgtexture = nullptr;
-	int entrysound;
+	SDL_Texture* enter = nullptr;
+	unsigned int entertimer;
+	unsigned int entrysound;
 
 };
