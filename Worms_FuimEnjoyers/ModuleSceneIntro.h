@@ -1,5 +1,7 @@
 #pragma once
 #include "Module.h"
+#include "Player.h"
+#include "Projectile.h"
 #include "Animation.h"
 #include "p2DynArray.h"
 #include "Globals.h"
@@ -32,7 +34,7 @@ struct Light
 class ModuleSceneIntro : public Module
 {
 public:
-	ModuleSceneIntro(Application* app, bool start_enabled = true);
+	ModuleSceneIntro(bool start_enabled = true);
 	~ModuleSceneIntro();
 
 	bool Start();
@@ -42,6 +44,9 @@ public:
 public:
 
 	SDL_Texture* graphics;
+	SDL_Texture* background;
+
+	Player* player1;
 
 	SDL_Texture* tex_light_tiny;
 	SDL_Texture* tex_light_medium;
@@ -54,4 +59,6 @@ public:
 	p2DynArray<Light> lights;
 
 	uint player_lose_fx;
+
+	p2List<Projectile*> projectiles;
 };

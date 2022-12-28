@@ -1,8 +1,8 @@
-#include "Globals.h"
 #include "Application.h"
+#include "Globals.h"
 #include "ModuleRender.h"
 
-ModuleRender::ModuleRender(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleRender::ModuleRender(bool start_enabled) : Module(start_enabled)
 {
 	renderer = NULL;
 	camera.x = camera.y = 0;

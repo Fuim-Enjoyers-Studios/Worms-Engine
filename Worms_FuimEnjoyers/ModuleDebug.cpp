@@ -4,7 +4,7 @@
 
 
 
-ModuleDebug::ModuleDebug(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleDebug::ModuleDebug(bool start_enabled) : Module(start_enabled)
 {
 }
 

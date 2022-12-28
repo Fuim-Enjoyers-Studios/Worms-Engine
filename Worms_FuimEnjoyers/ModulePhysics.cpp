@@ -1,10 +1,10 @@
-#include "Globals.h"
 #include "Application.h"
+#include "Globals.h"
 #include "ModulePhysics.h"
 #include "math.h"
 #include <cmath>
 
-ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModulePhysics::ModulePhysics(bool start_enabled) : Module(start_enabled)
 {
 	debug = true;
 }
