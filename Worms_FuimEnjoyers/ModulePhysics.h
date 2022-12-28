@@ -17,7 +17,7 @@ enum BodyType {
 };
 
 enum ShapeType {
-	BALL,
+	CIRCLE,
 	RECTANGLE
 };
 
@@ -64,7 +64,7 @@ public:
 	float coef_friction;
 	float coef_restitution;
 
-	//Shape BALL
+	//Shape CIRCLE
 	float radius;
 
 	//Shape RECTANGLE
@@ -73,6 +73,7 @@ public:
 private:
 	ShapeType stype;
 	bool water = false;
+	bool physics_enabled = true;
 
 public:
 
@@ -117,6 +118,22 @@ public:
 	ShapeType GetShape() {
 		return stype;
 	}
+
+	bool IsWater() {
+		return water;
+	}
+
+	void DisablePhysics() {
+		physics_enabled = false;
+	}
+
+	void EnablePhysics() {
+		physics_enabled = true;
+	}
+
+	bool ArePhysicsEnabled() {
+		return physics_enabled;
+	}
 };
 
 struct Atmosphere
@@ -143,9 +160,9 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int pos_x, int pos_y, int rad, BodyType bodyType);
-	PhysBody* CreateRectangle(int pos_x, int pos_y, int w, int h, BodyType bodyType);
-	PhysBody* CreateWaterRectangle(int pos_x, int pos_y, int w, int h);
+	PhysBody* CreateCircle(float pos_x, float pos_y, float rad, BodyType bodyType);
+	PhysBody* CreateRectangle(float pos_x, float pos_y, float w, float h, BodyType bodyType);
+	PhysBody* CreateWaterRectangle(float pos_x, float pos_y, float w, float h);
 
 	World world;
 
@@ -155,4 +172,35 @@ public:
 private:
 
 	bool debug;
+
+
+	// Detect collision with water
+	bool is_colliding_with_water(p2List_item<PhysBody*>* element);
+
+	//Checks collision between two elements
+	bool are_colliding(p2List_item<PhysBody*>* element1, p2List_item<PhysBody*>* element2);
+
+	// Detect collision between circle and rectange
+	bool check_collision_circle_rectangle(float cx, float cy, float cr, float rx, float ry, float rw, float rh);
+
+	// Detect collision between rectangle and rectange
+	bool check_collision_rectangle_rectangle(float rx1, float ry1, float rw1, float rh1, float rx2, float ry2, float rw2, float rh2);
+
+	// Detect collision between circle and circle
+	bool check_collision_circle_circle(float cx1, float cy1, float cr1, float cx2, float cy2, float cr2);
+
+	// Compute modulus of a vector
+	float modulus(float vx, float vy);
+
+	// Compute Aerodynamic Drag force
+	p2Point<float> compute_aerodynamic_drag(p2Point<float> dforce, p2List_item<PhysBody*>* element);
+
+	// Compute Hydrodynamic Drag force
+	p2Point<float> compute_hydrodynamic_drag(p2Point<float> dforce, p2List_item<PhysBody*>* element, p2List_item<PhysBody*>* water);
+
+	// Compute Hydrodynamic Buoyancy force
+	p2Point<float> compute_hydrodynamic_buoyancy(p2Point<float> bforce, p2List_item<PhysBody*>* element, p2List_item<PhysBody*>* water);
+
+	// Integration scheme: Velocity Verlet
+	void integrator_velocity_verlet(p2List_item<PhysBody*>* element);
 };
