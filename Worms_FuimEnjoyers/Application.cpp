@@ -26,10 +26,12 @@ Application::Application()
 	AddModule(audio);
 	AddModule(fonts);
 	AddModule(entityManager);
+
 	// Scenes
 	AddModule(scene_intro);
 	AddModule(scene_Menu);
-
+  
+	//Dbug info on screen
 	AddModule(debug);
 	//renderer the last one always
 	AddModule(renderer);
