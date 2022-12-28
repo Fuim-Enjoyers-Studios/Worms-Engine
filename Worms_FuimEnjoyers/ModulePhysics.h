@@ -2,6 +2,8 @@
 #include "Module.h"
 #include "Globals.h"
 #include <vector>
+#include "p2Point.h"
+#include "p2List.h"
 
 
 #define PIXELS_PER_METER (40.0f) //  40 pixel -> 1 meter
