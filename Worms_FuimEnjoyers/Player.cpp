@@ -87,11 +87,11 @@ bool Player::Start() {
 	texture = App->textures->Load(texturePath);
 	deathSound = App->audio->LoadFx("Assets/Audio/deathSound.wav");
 	body = App->physics->CreateRectangle(	PIXEL_TO_METERS(position.x), 
-											PIXEL_TO_METERS(position.y + h),
+											PIXEL_TO_METERS((position.y + h)),
 											PIXEL_TO_METERS(w),
 											PIXEL_TO_METERS(h),
 											BodyType::DYNAMIC);
-	// Set static properties
+	// Set static properties of the player
 	body->mass = 10.0f; // [kg]
 	body->surface = 1.0f; // [m^2]
 	body->cd = 0.4f; // [-]
@@ -99,8 +99,8 @@ bool Player::Start() {
 	body->b = 10.0f; // [...]
 	body->coef_friction = 0.9f; // [-]
 	body->coef_restitution = 0.8f; // [-]
-	
-
+	//
+	//Set initial position and velocity of the player
 	body->ctype = ColliderType::ENTITY;
 
 	return true;
@@ -111,7 +111,7 @@ bool Player::Update()
 	if (!App->physics->pause)
 	{
 
-		int speed = PIXEL_TO_METERS(5);
+		float speed = PIXEL_TO_METERS(10);
 
 		if (state != DYING && state != SHOOTING)
 		{

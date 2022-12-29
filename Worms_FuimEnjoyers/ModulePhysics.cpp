@@ -22,6 +22,8 @@ bool ModulePhysics::Start()
 	world.atmosphere.windx = 10.0f;
 	world.atmosphere.windy = 5.0f;
 	debug = true;
+	world.atmosphere.windx = 0.0f;
+	world.atmosphere.windy = 0.0f;
 
 	return true;
 }
@@ -130,7 +132,7 @@ update_status ModulePhysics::PreUpdate()
 						element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + element->data->radius;
 					}
 					else if (element->data->GetShape() == ShapeType::RECTANGLE) {
-						element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + (element->data->h / 2);
+						element->data->position.y = element_to_check->data->position.y + element_to_check->data->h;
 					}
 
 					// Elastic bounce with ground
@@ -365,10 +367,18 @@ p2Point<float> ModulePhysics::compute_aerodynamic_drag(p2Point<float> dforce, p2
 {
 	float rel_vel[2] = { element->data->velocity.x - world.atmosphere.windx, element->data->velocity.y - world.atmosphere.windy }; // Relative velocity
 	float speed = modulus(rel_vel[0], rel_vel[1]); // Modulus of the relative velocity
-	float rel_vel_unitary[2] = { rel_vel[0] / speed, rel_vel[1] / speed }; // Unitary vector of relative velocity
-	float fdrag_modulus = 0.5f * world.atmosphere.density * speed * speed * element->data->surface * element->data->cd; // Drag force (modulus)
-	dforce.x = -rel_vel_unitary[0] * fdrag_modulus; // Drag is antiparallel to relative velocity
-	dforce.y = -rel_vel_unitary[1] * fdrag_modulus; // Drag is antiparallel to relative velocity
+	if (speed != 0) {
+		float rel_vel_unitary[2] = { rel_vel[0] / speed, rel_vel[1] / speed }; // Unitary vector of relative velocity
+		float fdrag_modulus = 0.5f * world.atmosphere.density * speed * speed * element->data->surface * element->data->cd; // Drag force (modulus)
+		dforce.x = -rel_vel_unitary[0] * fdrag_modulus; // Drag is antiparallel to relative velocity
+		dforce.y = -rel_vel_unitary[1] * fdrag_modulus; // Drag is antiparallel to relative velocity
+	}
+	else {
+		float rel_vel_unitary[2] = { 0, 0 }; // Unitary vector of relative velocity
+		float fdrag_modulus = 0.5f * world.atmosphere.density * speed * speed * element->data->surface * element->data->cd; // Drag force (modulus)
+		dforce.x = -rel_vel_unitary[0] * fdrag_modulus; // Drag is antiparallel to relative velocity
+		dforce.y = -rel_vel_unitary[1] * fdrag_modulus; // Drag is antiparallel to relative velocity
+	}
 
 	return dforce;
 }
