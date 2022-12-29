@@ -30,6 +30,16 @@ public:
 		return body;
 	}
 
+	iVector getProjectile()
+	{
+		return projectileVector;
+	}
+
+	int getState()
+	{
+		return state;
+	}
+
 private:
 	
 	//L02: DONE 1: Declare player parameters
