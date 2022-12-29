@@ -193,6 +193,8 @@ bool ModuleRender::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 
 	{
 		points[i].x = (int) (x + radius * cos( i * factor));
 		points[i].y = (int) (y + radius * sin( i * factor));
+		points[i].x = (int)(camera.x + points[i].x * SCREEN_SIZE);
+		points[i].y = (int)(camera.y + points[i].y * SCREEN_SIZE);
 	}
 
 	result = SDL_RenderDrawPoints(renderer, points, 360);

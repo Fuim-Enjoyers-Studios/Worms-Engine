@@ -22,7 +22,7 @@ bool ModuleSceneIntro::Start()
 	//background = App->textures->Load("Assets/Textures/intro.png");
 	
 	//creating 1 player
-	player1 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer1.png", { METERS_TO_PIXELS(1), METERS_TO_PIXELS(3.5f) });
+	player1 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer1.png", { METERS_TO_PIXELS(1.5), METERS_TO_PIXELS(3.5f) });
 
 	//create ground
 	PhysBody* ground = App->physics->CreateRectangle((0.0f)/2, (0.0f)/2, (30.0f)/2, (5.0f)/2, BodyType::STATIC);
@@ -32,7 +32,7 @@ bool ModuleSceneIntro::Start()
 	PhysBody* water = App->physics->CreateWaterRectangle((0.0f + 30.0f)/2, (0.0f)/2, (30.0f)/2, (5.0f)/2);
 
 	//Create entity
-	PhysBody* ball = App->physics->CreateCircle((2.0f)/2, (0.0f + 5.0f + 2.0f)/2, (0.5f), BodyType::DYNAMIC);
+	PhysBody* ball = App->physics->CreateCircle((3.0f)/2, (0.0f + 5.0f + 2.0f)/2, (0.5f), BodyType::DYNAMIC);
 	// Set static properties of the ball
 	ball->mass = 10.0f; // [kg]
 	ball->surface = 1.0f; // [m^2]
@@ -43,8 +43,8 @@ bool ModuleSceneIntro::Start()
 	ball->coef_restitution = 0.8f; // [-]
 
 	// Set initial position and velocity of the ball
-	ball->velocity.x = 5.0f;
-	ball->velocity.y = 10.0f;
+	ball->velocity.x = 0.0f;
+	ball->velocity.y = 0.0f;
 	ball->ctype = ColliderType::ENTITY;
 
 	return ret;
