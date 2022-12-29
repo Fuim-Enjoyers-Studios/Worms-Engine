@@ -21,6 +21,7 @@ bool ModulePhysics::Start()
 	world.atmosphere.density = 1.0f;
 	world.atmosphere.windx = 10.0f;
 	world.atmosphere.windy = 5.0f;
+	debug = true;
 
 	return true;
 }
@@ -55,19 +56,21 @@ update_status ModulePhysics::PreUpdate()
 			// ----------------------------------------------------------------------------------------
 
 			// Gravity force
-			p2Point<float> gforce;
-			gforce.x = element->data->mass * 0.0f;
-			gforce.y = element->data->mass * -10.0f; //Gravity is constant and downwards
-			element->data->force += gforce; // Add this force to element's total force
-
-			// Aerodynamic Drag force (only when not in water)
-			if (!is_colliding_with_water(element))
-			{
-				p2Point<float> dforce;
-				dforce.x = 0.0f, dforce.y = 0.0f;
-				dforce = compute_aerodynamic_drag(dforce, element);
-				element->data->force += dforce; // Add this force to element's total force
+			if (App->debug->gravityEnabled == true) {
+				p2Point<float> gforce;
+				gforce.x = element->data->mass * 0.0f;
+				gforce.y = element->data->mass * -10.0f; //Gravity is constant and downwards
+				element->data->force += gforce; // Add this force to element's total force
 			}
+			
+			// Aerodynamic Drag force (only when not in water)
+			//if (!is_colliding_with_water(element))
+			//{
+			//	p2Point<float> dforce;
+			//	dforce.x = 0.0f, dforce.y = 0.0f;
+			//	dforce = compute_aerodynamic_drag(dforce, element);
+			//	element->data->force += dforce; // Add this force to element's total force
+			//}
 
 			// Hydrodynamic forces (only when in water)
 			if (is_colliding_with_water(element))
@@ -154,8 +157,7 @@ update_status ModulePhysics::PreUpdate()
 update_status ModulePhysics::PostUpdate()
 {
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
-		if (debug) { debug = !debug; }
-		else if (!debug) { debug = debug; }
+		debug = !debug;
 	}
 
 	return UPDATE_CONTINUE;

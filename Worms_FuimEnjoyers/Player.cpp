@@ -91,7 +91,7 @@ bool Player::Start() {
 											PIXEL_TO_METERS(w),
 											PIXEL_TO_METERS(h),
 											BodyType::DYNAMIC);
-	// Set static properties of the ball
+	// Set static properties
 	body->mass = 10.0f; // [kg]
 	body->surface = 1.0f; // [m^2]
 	body->cd = 0.4f; // [-]
@@ -99,8 +99,8 @@ bool Player::Start() {
 	body->b = 10.0f; // [...]
 	body->coef_friction = 0.9f; // [-]
 	body->coef_restitution = 0.8f; // [-]
-	//
-	//Set initial position and velocity of the ball
+	
+
 	body->ctype = ColliderType::ENTITY;
 
 	return true;
@@ -126,22 +126,26 @@ bool Player::Update()
 			{
 				//body->position.y -= speed;
 				body->velocity.y = -speed;
+				body->SetVelocity(body->velocity.x, body->velocity.y);
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
 				body->velocity.y = speed;
+				body->SetVelocity(body->velocity.x, body->velocity.y);
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 				state = WALK;
 				facing = FACING_LEFT;
 				body->velocity.x = -speed;
+				body->SetVelocity(body->velocity.x, body->velocity.y);
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 				state = WALK;
 				facing = FACING_RIGHT;
 				body->velocity.x = speed;
+				body->SetVelocity(body->velocity.x, body->velocity.y);
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)

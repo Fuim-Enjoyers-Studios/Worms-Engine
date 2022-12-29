@@ -89,6 +89,9 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->camera.x += speed;
 	}
 
+
+
+	//projectile
 	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
 	{
 		Projectile* projectile = (Projectile*)App->entityManager->CreateEntity(EntityType::PROJECTILE, "Assets/Textures/shotplayer1.png", player1->position);

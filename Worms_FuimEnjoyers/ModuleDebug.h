@@ -14,6 +14,6 @@ public:
 	bool CleanUp();
 
 public:
-
+	bool gravityEnabled;
 
 };
