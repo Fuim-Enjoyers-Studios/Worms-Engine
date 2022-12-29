@@ -126,26 +126,22 @@ bool Player::Update()
 			{
 				//body->position.y -= speed;
 				body->velocity.y = -speed;
-				body->SetVelocity(body->velocity.x, body->velocity.y);
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
 				body->velocity.y = speed;
-				body->SetVelocity(body->velocity.x, body->velocity.y);
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 				state = WALK;
 				facing = FACING_LEFT;
 				body->velocity.x = -speed;
-				body->SetVelocity(body->velocity.x, body->velocity.y);
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 				state = WALK;
 				facing = FACING_RIGHT;
 				body->velocity.x = speed;
-				body->SetVelocity(body->velocity.x, body->velocity.y);
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)

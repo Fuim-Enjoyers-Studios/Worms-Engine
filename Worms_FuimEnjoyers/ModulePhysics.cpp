@@ -19,8 +19,6 @@ bool ModulePhysics::Start()
 	LOG("Creating Physics 2D environment");
 
 	world.atmosphere.density = 1.0f;
-	world.atmosphere.windx = 10.0f;
-	world.atmosphere.windy = 5.0f;
 	debug = true;
 	world.atmosphere.windx = 0.0f;
 	world.atmosphere.windy = 0.0f;
