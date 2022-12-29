@@ -23,7 +23,13 @@ bool Projectile::Start() {
 
 bool Projectile::Update()
 {
-	pos.y += 1;
+	if (!App->physics->pause)
+	{
+		//here write how projectile updates if game is NOT paused
+		pos.y += 1;
+
+	}
+
 	App->renderer->Blit(texture, position.x, position.y);
 	return true;
 }

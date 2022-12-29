@@ -35,6 +35,10 @@ private:
 	//L02: DONE 1: Declare player parameters
 	iPoint pos;
 	int w, h;
+
+	iPoint objective;
+	iVector projectileVector;
+
 	SDL_Texture* texture;
 	const char* texturePath;
 	//animation stuff

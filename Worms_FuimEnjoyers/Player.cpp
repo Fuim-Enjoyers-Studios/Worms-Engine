@@ -10,6 +10,7 @@
 #define WALK 2
 #define JUMPING 3
 #define DYING 4
+#define SHOOTING 5
 
 Player::Player(const char* path, iPoint posi) : Entity(EntityType::PLAYER)
 {
@@ -112,7 +113,7 @@ bool Player::Update()
 
 		int speed = PIXEL_TO_METERS(5);
 
-		if (state != DYING)
+		if (state != DYING && state != SHOOTING)
 		{
 			//body->velocity = { 0,0 };
 			state = IDLE;
@@ -143,11 +144,16 @@ bool Player::Update()
 				body->velocity.x = speed;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 			{
 				state = DYING;
 				App->audio->PlayFx(deathSound);
 			}
+		}
+		if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN && state != SHOOTING)
+		{
+			objective = { position.x + 16, SCREEN_HEIGHT - position.y + 16 };
+			state = SHOOTING;
 		}
 
 		switch (state)
@@ -182,12 +188,43 @@ bool Player::Update()
 			currentAnimation = &DeathAnimation;
 
 			break;
+		case SHOOTING:
+			body->velocity = { 0,0 };
+
+			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+			{
+				objective.y -= 10;
+			}
+
+			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+			{
+				objective.y += 10;
+			}
+
+			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+			{
+				objective.x -= 10;
+			}
+
+			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+			{
+				objective.x += 10;
+			}
+
+
+			if (App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
+			{
+				//here should start the shoot, pass the projectilevector in pixels to the projectile
+				state = IDLE;
+			}
+			//vector of the projectile in pixels
+			projectileVector = { objective.x - position.x + 16, objective.y - position.y + 16 };
+
+			break;
 		default:
 			break;
 
 		}
-
-		//
 		currentAnimation->Update();
 	}
 	position.x = METERS_TO_PIXELS(body->position.x);
@@ -195,6 +232,10 @@ bool Player::Update()
 	//blit slime
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	App->renderer->Blit(texture, position.x, SCREEN_HEIGHT - position.y, &rect);
+	if (state == SHOOTING)
+	{
+		App->renderer->DrawLine(objective.x, objective.y, position.x + 16, SCREEN_HEIGHT - position.y + 16, 255, 255, 255);
+	}
 
 	return true;
 }
