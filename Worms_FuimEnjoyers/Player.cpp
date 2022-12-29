@@ -112,7 +112,6 @@ bool Player::Update()
 	{
 
 		float speed = PIXEL_TO_METERS(10);
-
 		if (state != DYING && state != SHOOTING)
 		{
 			//body->velocity = { 0,0 };

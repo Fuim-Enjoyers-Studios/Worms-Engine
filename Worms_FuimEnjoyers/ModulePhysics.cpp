@@ -363,6 +363,10 @@ float ModulePhysics::modulus(float vx, float vy)
 // Compute Aerodynamic Drag force
 p2Point<float> ModulePhysics::compute_aerodynamic_drag(p2Point<float> dforce, p2List_item<PhysBody*>* element)
 {
+	//check if is activated by debug
+	if (!App->debug->aerodynamiDragEnabled == true) {
+		return dforce;
+	}
 	float rel_vel[2] = { element->data->velocity.x - world.atmosphere.windx, element->data->velocity.y - world.atmosphere.windy }; // Relative velocity
 	float speed = modulus(rel_vel[0], rel_vel[1]); // Modulus of the relative velocity
 	if (speed != 0) {
@@ -377,13 +381,16 @@ p2Point<float> ModulePhysics::compute_aerodynamic_drag(p2Point<float> dforce, p2
 		dforce.x = -rel_vel_unitary[0] * fdrag_modulus; // Drag is antiparallel to relative velocity
 		dforce.y = -rel_vel_unitary[1] * fdrag_modulus; // Drag is antiparallel to relative velocity
 	}
-
 	return dforce;
 }
 
 // Compute Hydrodynamic Drag force
 p2Point<float> ModulePhysics::compute_hydrodynamic_drag(p2Point<float> dforce, p2List_item<PhysBody*>* element, p2List_item<PhysBody*>* water)
 {
+	//check if is activated by debug
+	if (!App->debug->hydrodynamicDragEnabled) {
+		return dforce;
+	}
 	float rel_vel[2] = { element->data->velocity.x - water->data->velocity.x, element->data->velocity.y - water->data->velocity.y }; // Relative velocity
 	float speed = modulus(rel_vel[0], rel_vel[1]); // Modulus of the relative velocity
 	float rel_vel_unitary[2] = { rel_vel[0] / speed, rel_vel[1] / speed }; // Unitary vector of relative velocity
@@ -397,6 +404,10 @@ p2Point<float> ModulePhysics::compute_hydrodynamic_drag(p2Point<float> dforce, p
 // Compute Hydrodynamic Buoyancy force
 p2Point<float> ModulePhysics::compute_hydrodynamic_buoyancy(p2Point<float> bforce, p2List_item<PhysBody*>* element, p2List_item<PhysBody*>* water)
 {
+	//check if is activated by debug
+	if (!App->debug->hydrodynamicBuoyancyEnabled) {
+		return bforce;
+	}
 	// Compute submerged area (assume ball is a rectangle, for simplicity)
 	float water_top_level = water->data->position.y + water->data->h; // Water top level y
 	float h = 2.0f * element->data->radius; // Ball "hitbox" height

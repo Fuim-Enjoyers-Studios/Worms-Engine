@@ -18,6 +18,9 @@ bool ModuleDebug::Start()
 	bool ret = true;
 
 	gravityEnabled = true;
+	aerodynamiDragEnabled = true;
+	hydrodynamicDragEnabled = true;
+	hydrodynamicBuoyancyEnabled = true;
 
 	return ret;
 }
@@ -40,17 +43,11 @@ update_status ModuleDebug::Update()
 
 update_status ModuleDebug::PostUpdate()
 {
+	//debug keys for activating and dactivating things
 	if (!App->physics->debug) {
 		return UPDATE_CONTINUE;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
-		/*if (App->scene_intro->player1->getBody()->GetMass() > 0.1f) {
-			App->scene_intro->player1->getBody()->SetMass(0.1f);
-		}
-		else {
-			App->scene_intro->player1->getBody()->SetMass(10.0f);
-		}*/
-
 		if (App->scene_intro->player1->getBody()->ArePhysicsEnabled() == true) {
 			App->scene_intro->player1->getBody()->DisablePhysics();
 		}
@@ -58,15 +55,18 @@ update_status ModuleDebug::PostUpdate()
 			App->scene_intro->player1->getBody()->EnablePhysics();
 		}
 	}
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
 		gravityEnabled = !gravityEnabled;
 	}
-	
-
-
-
-
-
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
+		aerodynamiDragEnabled = !aerodynamiDragEnabled;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
+		hydrodynamicDragEnabled = !hydrodynamicDragEnabled;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
+		hydrodynamicBuoyancyEnabled = !hydrodynamicBuoyancyEnabled;
+	}
 	// Colors
 	int color_r, color_g, color_b;
 	//DRAW COLLIDERS OF ALL ELEMENTS OF THE WORLD
