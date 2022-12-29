@@ -94,7 +94,11 @@ update_status ModuleSceneIntro::Update()
 		Projectile* projectile = (Projectile*)App->entityManager->CreateEntity(EntityType::PROJECTILE, "Assets/Textures/shotplayer1.png", player1->position);
 		projectiles.add(projectile);
 	}
-
+	//pause game
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	{
+		App->physics->Pause();
+	}
 
 
 	//App->renderer->Blit(background, 0, 0);

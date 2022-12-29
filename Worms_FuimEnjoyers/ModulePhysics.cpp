@@ -28,117 +28,122 @@ bool ModulePhysics::Start()
 // 
 update_status ModulePhysics::PreUpdate()
 {
-	p2List_item<PhysBody*>* element = world.Elements.getFirst();
-	// Process all elements in the world
-	while (element != NULL)
+	if (!pause)
 	{
-		// Skip element if static or physics not enabled
-		if (element->data->btype == BodyType::STATIC || !element->data->ArePhysicsEnabled()) {
-			element = element->next;
-			continue;
-		}
 
-		// Step #0: Clear old values
-		// ----------------------------------------------------------------------------------------
 
-		// Reset total acceleration and total accumulated force of the element
-		element->data->force.x = 0.0f;
-		element->data->force.y = 0.0f;
-		element->data->acceleration.x = 0.0f;
-		element->data->acceleration.y = 0.0f;
-
-		// Step #1: Compute forces
-		// ----------------------------------------------------------------------------------------
-
-		// Gravity force
-		p2Point<float> gforce;
-		gforce.x = element->data->mass * 0.0f;
-		gforce.y = element->data->mass * -10.0f; //Gravity is constant and downwards
-		element->data->force += gforce; // Add this force to element's total force
-
-		// Aerodynamic Drag force (only when not in water)
-		if (!is_colliding_with_water(element))
+		p2List_item<PhysBody*>* element = world.Elements.getFirst();
+		// Process all elements in the world
+		while (element != NULL)
 		{
-			p2Point<float> dforce;
-			dforce.x = 0.0f, dforce.y = 0.0f;
-			dforce = compute_aerodynamic_drag(dforce, element);
-			element->data->force += dforce; // Add this force to element's total force
-		}
+			// Skip element if static or physics not enabled
+			if (element->data->btype == BodyType::STATIC || !element->data->ArePhysicsEnabled()) {
+				element = element->next;
+				continue;
+			}
 
-		// Hydrodynamic forces (only when in water)
-		if (is_colliding_with_water(element))
-		{
+			// Step #0: Clear old values
+			// ----------------------------------------------------------------------------------------
+
+			// Reset total acceleration and total accumulated force of the element
+			element->data->force.x = 0.0f;
+			element->data->force.y = 0.0f;
+			element->data->acceleration.x = 0.0f;
+			element->data->acceleration.y = 0.0f;
+
+			// Step #1: Compute forces
+			// ----------------------------------------------------------------------------------------
+
+			// Gravity force
+			p2Point<float> gforce;
+			gforce.x = element->data->mass * 0.0f;
+			gforce.y = element->data->mass * -10.0f; //Gravity is constant and downwards
+			element->data->force += gforce; // Add this force to element's total force
+
+			// Aerodynamic Drag force (only when not in water)
+			if (!is_colliding_with_water(element))
+			{
+				p2Point<float> dforce;
+				dforce.x = 0.0f, dforce.y = 0.0f;
+				dforce = compute_aerodynamic_drag(dforce, element);
+				element->data->force += dforce; // Add this force to element's total force
+			}
+
+			// Hydrodynamic forces (only when in water)
+			if (is_colliding_with_water(element))
+			{
+				//Iterate wuith all elements of the world
+				p2List_item<PhysBody*>* element_to_check = world.Elements.getFirst();
+				while (element_to_check != NULL)
+				{
+					//If element is water type, check if colliding
+					if (element_to_check->data->IsWater()) {
+						// Hydrodynamic Drag force
+						p2Point<float> dforce;
+						dforce.x = 0.0f, dforce.y = 0.0f;
+						dforce = compute_hydrodynamic_drag(dforce, element, element_to_check);
+						element->data->force += dforce; // Add this force to ball's total force
+
+						// Hydrodynamic Buoyancy force
+						p2Point<float> bforce;
+						bforce.x = 0.0f, bforce.y = 0.0f;
+						bforce = compute_hydrodynamic_buoyancy(bforce, element, element_to_check);
+						element->data->force += bforce; // Add this force to ball's total force
+					}
+
+					//Next element of the world
+					element_to_check = element_to_check->next;
+				}
+			}
+
+			// Other forces
+			// ...
+
+			// Step #2: 2nd Newton's Law
+			// ----------------------------------------------------------------------------------------
+
+			// SUM_Forces = mass * accel --> accel = SUM_Forces / mass
+			element->data->acceleration.x = element->data->force.x / element->data->mass;
+			element->data->acceleration.y = element->data->force.y / element->data->mass;
+
+			// Step #3: Integrate --> from accel to new velocity & new position
+			// ----------------------------------------------------------------------------------------
+
+			// We will use the 2nd order "Velocity Verlet" method for integration
+			//Will use the dt (frame gap) declared on the header, modify it before if desired
+			integrator_velocity_verlet(element);
+
+			// Step #4: solve collisions
+			// ----------------------------------------------------------------------------------------
+
+			// Solve collision between element and ground
 			//Iterate wuith all elements of the world
 			p2List_item<PhysBody*>* element_to_check = world.Elements.getFirst();
 			while (element_to_check != NULL)
 			{
-				//If element is water type, check if colliding
-				if (element_to_check->data->IsWater()) {
-					// Hydrodynamic Drag force
-					p2Point<float> dforce;
-					dforce.x = 0.0f, dforce.y = 0.0f;
-					dforce = compute_hydrodynamic_drag(dforce, element, element_to_check);
-					element->data->force += dforce; // Add this force to ball's total force
+				if (element_to_check->data->ctype == ColliderType::GROUND && are_colliding(element, element_to_check)) {
+					// TP ball to ground surface
+					if (element->data->GetShape() == ShapeType::CIRCLE) {
+						element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + element->data->radius;
+					}
+					else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+						element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + (element->data->h / 2);
+					}
 
-					// Hydrodynamic Buoyancy force
-					p2Point<float> bforce;
-					bforce.x = 0.0f, bforce.y = 0.0f;
-					bforce = compute_hydrodynamic_buoyancy(bforce, element, element_to_check);
-					element->data->force += bforce; // Add this force to ball's total force
+					// Elastic bounce with ground
+					element->data->velocity.y = -element->data->velocity.y;
+
+					// FUYM non-elasticity
+					element->data->velocity.x *= element->data->coef_friction;
+					element->data->velocity.y *= element->data->coef_restitution;
 				}
 
 				//Next element of the world
 				element_to_check = element_to_check->next;
 			}
+
+			element = element->next;
 		}
-
-		// Other forces
-		// ...
-
-		// Step #2: 2nd Newton's Law
-		// ----------------------------------------------------------------------------------------
-
-		// SUM_Forces = mass * accel --> accel = SUM_Forces / mass
-		element->data->acceleration.x = element->data->force.x / element->data->mass;
-		element->data->acceleration.y = element->data->force.y / element->data->mass; 
-
-		// Step #3: Integrate --> from accel to new velocity & new position
-		// ----------------------------------------------------------------------------------------
-
-		// We will use the 2nd order "Velocity Verlet" method for integration
-		//Will use the dt (frame gap) declared on the header, modify it before if desired
-		integrator_velocity_verlet(element);
-
-		// Step #4: solve collisions
-		// ----------------------------------------------------------------------------------------
-
-		// Solve collision between element and ground
-		//Iterate wuith all elements of the world
-		p2List_item<PhysBody*>* element_to_check = world.Elements.getFirst();
-		while (element_to_check != NULL)
-		{
-			if (element_to_check->data->ctype == ColliderType::GROUND && are_colliding(element, element_to_check)) {
-				// TP ball to ground surface
-				if (element->data->GetShape() == ShapeType::CIRCLE) {
-					element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + element->data->radius;
-				}
-				else if (element->data->GetShape() == ShapeType::RECTANGLE) {
-					element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + (element->data->h / 2);
-				}
-
-				// Elastic bounce with ground
-				element->data->velocity.y = -element->data->velocity.y;
-
-				// FUYM non-elasticity
-				element->data->velocity.x *= element->data->coef_friction;
-				element->data->velocity.y *= element->data->coef_restitution;
-			}
-
-			//Next element of the world
-			element_to_check = element_to_check->next;
-		}
-
-		element = element->next;
 	}
 
 	//Next element of the world
@@ -154,6 +159,11 @@ update_status ModulePhysics::PostUpdate()
 	}
 
 	return UPDATE_CONTINUE;
+}
+
+void ModulePhysics::Pause()
+{
+	pause = !pause;
 }
 
 // Called before quitting

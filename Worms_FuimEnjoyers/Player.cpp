@@ -107,85 +107,94 @@ bool Player::Start() {
 
 bool Player::Update()
 {
-	int speed = PIXEL_TO_METERS(5);
-
-	if (state != DYING)
+	if (!App->physics->pause)
 	{
-		state = IDLE;
-		DeathAnimation.Reset();
-	}
-	////L02: DONE 4: modify the position of the player using arrow keys and render the texture
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-	{
-		body->position.y -= speed;
-	}
 
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-		body->position.y += speed;
-	}
+		int speed = PIXEL_TO_METERS(5);
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		state = WALK;
-		facing = FACING_LEFT;
-		body->position.x -= speed;
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		state = WALK;
-		facing = FACING_RIGHT;
-		body->position.x += speed;
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
-	{
-		state = DYING;
-		App->audio->PlayFx(deathSound);
-	}
-
-	switch (state)
-	{
-	case IDLE:
-
-		currentAnimation = &IdleAnimation;
-
-		break;
-	case WALK:
-		if (facing == FACING_LEFT)
+		if (state != DYING)
 		{
-			currentAnimation = &WalkLeftAnimation;
-		}
-		else if (facing == FACING_RIGHT)
-		{
-			currentAnimation = &WalkRightAnimation;
-		}
-		break;
-	case JUMPING:
-		if (facing == FACING_LEFT)
-		{
-			currentAnimation = &JumpLeftAnimation;
-		}
-		else if (facing == FACING_RIGHT)
-		{
-			currentAnimation = &JumpRightAnimation;
-		}
-		break;
-	case DYING:
+			//body->velocity = { 0,0 };
+			state = IDLE;
+			DeathAnimation.Reset();
+			//moves player when its alive
+			//error: player is always moving to the right for no reason
+			//to do: in each input it applies the speed, we must write somewhere... 
+			//...what woule be the final velocity, and at the end of the update apply it
+			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+			{
+				//body->position.y -= speed;
+				body->velocity.y = -speed;
+			}
 
-		currentAnimation = &DeathAnimation;
+			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+				body->velocity.y = speed;
+			}
 
-		break;
-	default:
-		break;
+			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+				state = WALK;
+				facing = FACING_LEFT;
+				body->velocity.x = -speed;
+			}
 
+			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+				state = WALK;
+				facing = FACING_RIGHT;
+				body->velocity.x = speed;
+			}
+
+			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+			{
+				state = DYING;
+				App->audio->PlayFx(deathSound);
+			}
+		}
+
+		switch (state)
+		{
+		case IDLE:
+
+			currentAnimation = &IdleAnimation;
+
+			break;
+		case WALK:
+			if (facing == FACING_LEFT)
+			{
+				currentAnimation = &WalkLeftAnimation;
+			}
+			else if (facing == FACING_RIGHT)
+			{
+				currentAnimation = &WalkRightAnimation;
+			}
+			break;
+		case JUMPING:
+			if (facing == FACING_LEFT)
+			{
+				currentAnimation = &JumpLeftAnimation;
+			}
+			else if (facing == FACING_RIGHT)
+			{
+				currentAnimation = &JumpRightAnimation;
+			}
+			break;
+		case DYING:
+
+			currentAnimation = &DeathAnimation;
+
+			break;
+		default:
+			break;
+
+		}
+
+		//
+		currentAnimation->Update();
 	}
-	
-	//
 	position.x = METERS_TO_PIXELS(body->position.x);
 	position.y = METERS_TO_PIXELS(body->position.y) + h;
 	//blit slime
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	App->renderer->Blit(texture, position.x, SCREEN_HEIGHT - position.y, &rect);
-	currentAnimation->Update();
 
 	return true;
 }
