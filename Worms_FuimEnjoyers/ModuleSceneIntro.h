@@ -50,6 +50,8 @@ public:
 	PhysBody* ground2;
 	PhysBody* ground3;
 	PhysBody* ground4;
+	PhysBody* ground5;
+	PhysBody* ground6;
 	PhysBody* water;
 
 	SDL_Texture* tex_light_tiny;
