@@ -325,19 +325,25 @@ update_status ModuleDebug::PostUpdate()
 	default:
 		break;
 	}
-	if (pause) {
-		App->fonts->BlitText(20, 240, 0, "p pause: enabled");
+	if (FPS == 120) {
+		App->fonts->BlitText(20, 200, 0, "f11 current fps: 30");
 	}
 	else {
-		App->fonts->BlitText(20, 240, 0, "p pause: disabled");
+		App->fonts->BlitText(20, 200, 0, "f11 current fps: 60");
+	}
+	if (pause) {
+		App->fonts->BlitText(20, 260, 0, "p pause: enabled");
+	}
+	else {
+		App->fonts->BlitText(20, 260, 0, "p pause: disabled");
 	}
 	sprintf_s(radiusText, 4, "%d", App->scene_intro->actualPlayer->data->getRadius());
-	App->fonts->BlitText(20, 200, 0, "actual player shooting radius: ");
-	App->fonts->BlitText(265, 200,0, radiusText);
+	App->fonts->BlitText(20, 220, 0, "actual player shooting radius: ");
+	App->fonts->BlitText(265, 220,0, radiusText);
 
 	sprintf_s(angleText, 11, "%f", RADTODEG * abs(App->scene_intro->actualPlayer->data->getAngle()));
-	App->fonts->BlitText(20, 220, 0, "actual player shooting angle: ");
-	App->fonts->BlitText(255, 220, 0, angleText);
+	App->fonts->BlitText(20, 240, 0, "actual player shooting angle: ");
+	App->fonts->BlitText(255, 240, 0, angleText);
 	
 	return UPDATE_CONTINUE;
 }

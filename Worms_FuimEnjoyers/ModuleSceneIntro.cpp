@@ -160,16 +160,8 @@ update_status ModuleSceneIntro::Update()
 				actualPlayer = players.getFirst();
 			}
 
-			// AQUI SE DESPAWNEA EL SHOT
 
-			/*p2List_item<Projectile*>* projectileItem = projectiles.getFirst();
-
-			while (projectileItem != NULL)
-			{
-				delete projectileItem->data;
-				projectileItem->data = NULL;
-				projectileItem = projectileItem->next;
-			}*/
+			projectiles.clear();
 		}
 	}
 	App->renderer->Blit(background, 1, -250);
