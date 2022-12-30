@@ -67,4 +67,7 @@ public:
 	p2List<Projectile*> projectiles;
 	p2List<Player*> players;
 	p2List_item<Player*>* actualPlayer;
+
+	int despawnTimer;
+	bool shot;
 };

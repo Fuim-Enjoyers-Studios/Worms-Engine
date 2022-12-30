@@ -62,6 +62,9 @@ bool ModuleSceneIntro::Start()
 
 	actualPlayer = players.getFirst();
 
+	despawnTimer = 0;
+	shot = false;
+
 	return ret;
 }
 
@@ -86,22 +89,28 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	/*if (actualPlayer->data->position.x > 400 / SCREEN_SIZE && actualPlayer->data->position.x < ((SCREEN_HEIGHT * SCREEN_WIDTH) - (METERS_TO_PIXELS((ground4->position.x + ground4->w)) + SCREEN_WIDTH) / SCREEN_SIZE)) {
+		App->renderer->camera.x = ((actualPlayer->data->position.x - 400 / SCREEN_SIZE) * -1) * SCREEN_SIZE;
+	}*/
+	if (actualPlayer->data->getState() != SHOOTING)
+	{
+		App->renderer->camera.x = ((actualPlayer->data->position.x - 400 / SCREEN_SIZE) * -1) * SCREEN_SIZE;
+	}
+
+	/*if (actualPlayer->data->position.y > 300 / SCREEN_SIZE && actualPlayer->data->position.y < ((SCREEN_HEIGHT * SCREEN_WIDTH) - 458 / SCREEN_SIZE)) {
+		App->renderer->camera.y = ((actualPlayer->data->position.y - 300 / SCREEN_SIZE) * -1) * SCREEN_SIZE;
+	}*/
 	int speed = 10;
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	if (actualPlayer->data->getState() == SHOOTING || App->debug->debug)
 	{
-		App->renderer->camera.y += speed;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	{
-		App->renderer->camera.y -= speed;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	{
-		App->renderer->camera.x -= speed;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	{
-		App->renderer->camera.x += speed;
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		{
+			App->renderer->camera.x -= speed;
+		}
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		{
+			App->renderer->camera.x += speed;
+		}
 	}
 
 
@@ -111,6 +120,7 @@ update_status ModuleSceneIntro::Update()
 	//projectile
 	if ((App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) && (actualPlayer->data->getState() == SHOOTING))
 	{
+		shot = true;
 		Projectile* projectile;
 		switch (actualPlayer->data->getIndex())
 		{
@@ -129,17 +139,37 @@ update_status ModuleSceneIntro::Update()
 		default:
 			break;
 		}
-		
 		projectiles.add(projectile);
-		actualPlayer->data->endTurn();
-		actualPlayer->data->setState(IDLE);
-		if (actualPlayer->next != NULL)
+
+	}
+	if (shot == true)
+	{
+		despawnTimer++;
+		if (despawnTimer > 60)
 		{
-			actualPlayer = actualPlayer->next;
-		}
-		else
-		{
-			actualPlayer = players.getFirst();
+			actualPlayer->data->endTurn();
+			actualPlayer->data->setState(IDLE);
+			shot = false;
+			despawnTimer = 0;
+			if (actualPlayer->next != NULL)
+			{
+				actualPlayer = actualPlayer->next;
+			}
+			else
+			{
+				actualPlayer = players.getFirst();
+			}
+
+			// AQUI SE DESPAWNEA EL SHOT
+
+			/*p2List_item<Projectile*>* projectileItem = projectiles.getFirst();
+
+			while (projectileItem != NULL)
+			{
+				delete projectileItem->data;
+				projectileItem->data = NULL;
+				projectileItem = projectileItem->next;
+			}*/
 		}
 	}
 	App->renderer->Blit(background, 1, -250);
