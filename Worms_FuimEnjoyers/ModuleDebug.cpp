@@ -26,7 +26,7 @@ bool ModuleDebug::Start()
 	debugSpeed = false;
 
 
-	App->fonts->Load("Assets/Fonts/sprite_font_black.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ ", 6);
+	App->fonts->Load("Assets/Fonts/sprite_font_red.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ ", 6);
 
 	return ret;
 }
