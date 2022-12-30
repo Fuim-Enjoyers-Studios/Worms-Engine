@@ -2,6 +2,14 @@
 #include "Module.h"
 #include "Globals.h"
 
+enum class DeltaTimeScheme
+{
+	FIXED,
+	VARIABLE,
+	SEMIFIXED,
+	UNKNOWN
+};
+
 class ModuleDebug : public Module
 {
 public:
@@ -21,6 +29,8 @@ public:
 	bool pause;
 	bool debug;
 	bool debugSpeed;
+
+	DeltaTimeScheme deltaTime;
 
 
 	char radiusText[10] = { "\0" };

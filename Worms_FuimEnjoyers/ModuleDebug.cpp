@@ -24,6 +24,7 @@ bool ModuleDebug::Start()
 	pause = false;
 	debug = true;
 	debugSpeed = false;
+	deltaTime = DeltaTimeScheme::FIXED;
 
 
 	App->fonts->Load("Assets/Fonts/sprite_font_red.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ ", 6);
@@ -181,6 +182,17 @@ update_status ModuleDebug::PostUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) {
 		if (debugSpeed) { debugSpeed = false; }
 		else if (!debugSpeed) { debugSpeed = true; }
+	}
+	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) {
+		deltaTime = DeltaTimeScheme::FIXED;
+		App->physics->dt = 1 / 60;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
+		deltaTime = DeltaTimeScheme::VARIABLE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
+		deltaTime = DeltaTimeScheme::SEMIFIXED;
+		App->physics->dt = 1 / 60;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
 		if (pause) { pause = false; }

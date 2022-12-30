@@ -1,4 +1,7 @@
 #include "Application.h"
+#include <chrono>
+
+using namespace std::chrono;
 
 Application::Application()
 {
@@ -83,6 +86,7 @@ update_status Application::Update()
 	update_status ret = UPDATE_CONTINUE;
 	p2List_item<Module*>* item = list_modules.getFirst();
 
+	auto start = steady_clock::now();
 	while(item != NULL && ret == UPDATE_CONTINUE)
 	{
 		if(item->data->IsEnabled())
@@ -106,6 +110,28 @@ update_status Application::Update()
 		if(item->data->IsEnabled())
 			ret = item->data->PostUpdate();
 		item = item->next;
+	}
+	auto end = steady_clock::now();
+
+	clock = duration_cast<milliseconds>(end - start).count();
+
+	switch (App->debug->deltaTime)
+	{
+	case DeltaTimeScheme::VARIABLE:
+		physics->dt = clock / 1000.0;
+		break;
+	case DeltaTimeScheme::SEMIFIXED:
+		if (clock < 1.0 / 60.0 * 1000.0) {
+			SDL_Delay((1.0 / 60.0 * 1000.0) - clock);
+		}
+		physics->dt = 1.0 / 60.0;
+		break;
+	case DeltaTimeScheme::FIXED:
+		physics->dt = 1.0 / 60.0;
+		break;
+	default:
+
+		break;
 	}
 
 	return ret;

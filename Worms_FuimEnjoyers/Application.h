@@ -30,6 +30,7 @@ public:
 	ModuleFonts* fonts;
 	ModuleDebug* debug;
 	EntityManager* entityManager;
+	long long clock;
 
 private:
 
