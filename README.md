@@ -1,6 +1,7 @@
+# [_WormsEngine by Fuim Enjoyers_](https://github.com/Fuim-Enjoyers-Studios/Pinball-Game)
+
 # Worms-Engine
 To test our knowledge on fundamental game physics we created a WORMS-like game. The game has at least one player worm that is able to shoot physics-enabled weapons/items to targets.
-# [_WormsEngine by Fuim Enjoyers_](https://github.com/Fuim-Enjoyers-Studios/Pinball-Game)
 
 ## Description
 

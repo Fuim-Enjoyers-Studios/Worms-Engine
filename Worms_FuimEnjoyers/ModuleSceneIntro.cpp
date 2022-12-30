@@ -49,6 +49,7 @@ bool ModuleSceneIntro::Start()
 
 	ground6 = App->physics->CreateRectangle(-1.0f, -1.0f, ground4->position.x + ground4->w, 1.0f, BodyType::STATIC);
 	ground6->ctype = ColliderType::GROUND;
+  
 	//Create entity
 	//creating 1 player
 	Player* player1 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer1.png", { METERS_TO_PIXELS(1.5), METERS_TO_PIXELS(3.5f) });
@@ -187,16 +188,8 @@ update_status ModuleSceneIntro::Update()
 				actualPlayer->data->setState(IDLE);
 			}
 
-			// AQUI SE DESPAWNEA EL SHOT
 
-			/*p2List_item<Projectile*>* projectileItem = projectiles.getFirst();
-
-			while (projectileItem != NULL)
-			{
-				delete projectileItem->data;
-				projectileItem->data = NULL;
-				projectileItem = projectileItem->next;
-			}*/
+			projectiles.clear();
 		}
 	}
 	App->renderer->Blit(background, 1, -250);
