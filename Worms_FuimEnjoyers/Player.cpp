@@ -11,6 +11,7 @@
 #define JUMPING 3
 #define DYING 4
 #define SHOOTING 5
+#define WAITING 6
 
 Player::Player(const char* path, iPoint posi) : Entity(EntityType::PLAYER)
 {
@@ -126,7 +127,7 @@ bool Player::Update()
 
 	if (turn)
 	{
-		if (state != DYING && state != SHOOTING)
+		if (state != DYING && state != SHOOTING && state != WAITING)
 		{
 			//body->velocity = { 0,0 };
 			state = IDLE;
@@ -157,11 +158,11 @@ bool Player::Update()
 				body->velocity.x = speed;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+			/*if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 			{
 				state = DYING;
 				App->audio->PlayFx(deathSound);
-			}
+			}*/
 			if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
 			{
 				state = SHOOTING;
@@ -172,6 +173,11 @@ bool Player::Update()
     switch (state)
 	{
 	case IDLE:
+
+		currentAnimation = &IdleAnimation;
+
+		break;
+	case WAITING:
 
 		currentAnimation = &IdleAnimation;
 
@@ -202,7 +208,7 @@ bool Player::Update()
 
 		break;
 	case SHOOTING:
-		body->velocity = { 0,0 };
+		body->velocity.x = 0;
 
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		{

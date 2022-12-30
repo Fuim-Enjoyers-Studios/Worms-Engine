@@ -7,6 +7,7 @@
 #define JUMPING 3
 #define DYING 4
 #define SHOOTING 5
+#define WAITING 6
 
 
 
@@ -118,7 +119,7 @@ update_status ModuleSceneIntro::Update()
 
 
 	//projectile
-	if ((App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) && (actualPlayer->data->getState() == SHOOTING))
+	if ((App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) && (actualPlayer->data->getState() == SHOOTING))
 	{
 		shot = true;
 		Projectile* projectile;
@@ -140,7 +141,7 @@ update_status ModuleSceneIntro::Update()
 			break;
 		}
 		projectiles.add(projectile);
-
+		actualPlayer->data->setState(WAITING);
 	}
 	if (shot == true)
 	{
@@ -148,7 +149,6 @@ update_status ModuleSceneIntro::Update()
 		if (despawnTimer > 60)
 		{
 			actualPlayer->data->endTurn();
-			actualPlayer->data->setState(IDLE);
 			shot = false;
 			despawnTimer = 0;
 			if (actualPlayer->next != NULL)
