@@ -21,6 +21,7 @@ bool ModuleDebug::Start()
 	aerodynamiDragEnabled = true;
 	hydrodynamicDragEnabled = true;
 	hydrodynamicBuoyancyEnabled = true;
+	pause = false;
 
 
 	App->fonts->Load("Assets/Fonts/sprite_font_white.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ ", 6);
@@ -69,6 +70,10 @@ update_status ModuleDebug::PostUpdate()
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
 		hydrodynamicBuoyancyEnabled = !hydrodynamicBuoyancyEnabled;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
+		if (pause) { pause = false; }
+		else if (!pause) { pause = true; }
 	}
 	// Colors
 	int color_r, color_g, color_b;

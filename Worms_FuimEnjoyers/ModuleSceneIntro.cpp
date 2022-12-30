@@ -89,21 +89,16 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->camera.x += speed;
 	}
 
-
-
 	//projectile
 	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
 	{
-		Projectile* projectile = (Projectile*)App->entityManager->CreateEntity(EntityType::PROJECTILE, "Assets/Textures/shotplayer1.png", player1->position);
-		projectiles.add(projectile);
-	}
-	//pause game
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
-	{
-		App->physics->Pause();
-	}
+		//if player state is shooting
+		if (player1->getState() == 5 ) {
+			Projectile* projectile = (Projectile*)App->entityManager->CreateEntity(EntityType::PROJECTILE, "Assets/Textures/shotplayer1.png", player1->position);
+			projectiles.add(projectile);
+		}
 
-
+	}
 	//App->renderer->Blit(background, 0, 0);
 
 

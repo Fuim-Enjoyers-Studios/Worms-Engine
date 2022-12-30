@@ -111,130 +111,130 @@ bool Player::Start() {
 
 bool Player::Update()
 {
-	if (!App->physics->pause)
+	if (App->debug->pause == true)
 	{
-
-		float speed = PIXEL_TO_METERS(100);
-		if (state != DYING && state != SHOOTING)
-		{
-			//body->velocity = { 0,0 };
-			state = IDLE;
-			DeathAnimation.Reset();
-			//moves player when its alive
-			//error: player is always moving to the right for no reason
-			//to do: in each input it applies the speed, we must write somewhere... 
-			//...what woule be the final velocity, and at the end of the update apply it
-			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-			{
-				//body->position.y -= speed;
-				body->velocity.y = -speed;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-				body->velocity.y = speed;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-				state = WALK;
-				facing = FACING_LEFT;
-				body->velocity.x = -speed;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-				state = WALK;
-				facing = FACING_RIGHT;
-				body->velocity.x = speed;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-			{
-				state = DYING;
-				App->audio->PlayFx(deathSound);
-			}
-		}
-		if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN && state != SHOOTING)
-		{
-			state = SHOOTING;
-		}
-
-		switch (state)
-		{
-		case IDLE:
-
-			currentAnimation = &IdleAnimation;
-
-			break;
-		case WALK:
-			if (facing == FACING_LEFT)
-			{
-				currentAnimation = &WalkLeftAnimation;
-			}
-			else if (facing == FACING_RIGHT)
-			{
-				currentAnimation = &WalkRightAnimation;
-			}
-			break;
-		case JUMPING:
-			if (facing == FACING_LEFT)
-			{
-				currentAnimation = &JumpLeftAnimation;
-			}
-			else if (facing == FACING_RIGHT)
-			{
-				currentAnimation = &JumpRightAnimation;
-			}
-			break;
-		case DYING:
-
-			currentAnimation = &DeathAnimation;
-
-			break;
-		case SHOOTING:
-			body->velocity = { 0,0 };
-
-			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-			{
-				rad += 8;
-				if (rad > 400)
-				{
-					rad = 400;
-				}
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-			{
-				rad -= 8;
-				if (rad < 8)
-				{
-					rad = 8;
-				}
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-			{
-				angle -= 0.1f;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-			{
-				angle += 0.1f;
-			}
-
-
-			if (App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
-			{
-				//here should start the shoot, pass the projectilevector in pixels to the projectile
-				state = IDLE;
-			}
-			//vector of the projectile in pixels
-			projectileVector = { angleToPoint(rad, angle).x ,  angleToPoint(rad, angle).y };
-			break;
-		default:
-			break;
-
-		}
-		currentAnimation->Update();
+		return UPDATE_CONTINUE;
 	}
+	float speed = PIXEL_TO_METERS(100);
+	if (state != DYING && state != SHOOTING)
+	{
+		//body->velocity = { 0,0 };
+		state = IDLE;
+		DeathAnimation.Reset();
+		//moves player when its alive
+		//error: player is always moving to the right for no reason
+		//to do: in each input it applies the speed, we must write somewhere... 
+		//...what woule be the final velocity, and at the end of the update apply it
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		{
+			//body->position.y -= speed;
+			body->velocity.y = speed;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+			body->velocity.y = -speed;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			state = WALK;
+			facing = FACING_LEFT;
+			body->velocity.x = -speed;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+			state = WALK;
+			facing = FACING_RIGHT;
+			body->velocity.x = speed;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		{
+			state = DYING;
+			App->audio->PlayFx(deathSound);
+		}
+	}
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN && state != SHOOTING)
+	{
+		state = SHOOTING;
+	}
+
+	switch (state)
+	{
+	case IDLE:
+
+		currentAnimation = &IdleAnimation;
+
+		break;
+	case WALK:
+		if (facing == FACING_LEFT)
+		{
+			currentAnimation = &WalkLeftAnimation;
+		}
+		else if (facing == FACING_RIGHT)
+		{
+			currentAnimation = &WalkRightAnimation;
+		}
+		break;
+	case JUMPING:
+		if (facing == FACING_LEFT)
+		{
+			currentAnimation = &JumpLeftAnimation;
+		}
+		else if (facing == FACING_RIGHT)
+		{
+			currentAnimation = &JumpRightAnimation;
+		}
+		break;
+	case DYING:
+
+		currentAnimation = &DeathAnimation;
+
+		break;
+	case SHOOTING:
+		body->velocity = { 0,0 };
+
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		{
+			rad += 8;
+			if (rad > 400)
+			{
+				rad = 400;
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		{
+			rad -= 8;
+			if (rad < 8)
+			{
+				rad = 8;
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		{
+			angle -= 0.1f;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		{
+			angle += 0.1f;
+		}
+
+
+		if (App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
+		{
+			//here should start the shoot, pass the projectilevector in pixels to the projectile
+			state = IDLE;
+		}
+		//vector of the projectile in pixels
+		projectileVector = { angleToPoint(rad, angle).x ,  angleToPoint(rad, angle).y };
+		break;
+	default:
+		break;
+
+	}
+	currentAnimation->Update();
 	position.x = METERS_TO_PIXELS(body->position.x);
 	position.y = METERS_TO_PIXELS(body->position.y) + h;
 	//blit slime

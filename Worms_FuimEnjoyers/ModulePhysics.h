@@ -170,14 +170,12 @@ public:
 	PhysBody* CreateRectangle(float pos_x, float pos_y, float w, float h, BodyType bodyType);
 	PhysBody* CreateWaterRectangle(float pos_x, float pos_y, float w, float h);
 
-	void Pause();
-
 	World world;
 
 	//Time between frames
 	float dt = 1.0 / 60.0;
 
-	bool pause = false;
+
 	bool debug;
 
 private:

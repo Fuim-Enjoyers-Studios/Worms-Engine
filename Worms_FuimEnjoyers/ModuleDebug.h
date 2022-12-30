@@ -18,5 +18,6 @@ public:
 	bool aerodynamiDragEnabled;
 	bool hydrodynamicDragEnabled;
 	bool hydrodynamicBuoyancyEnabled;
+	bool pause;
 
 };
