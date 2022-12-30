@@ -24,11 +24,18 @@ public:
 
 public:
 
+	PhysBody* getBody()
+	{
+		return body;
+	}
+
 private:
 
 	iPoint pos;
 	SDL_Texture* texture;
 	const char* texturePath;
+
+	PhysBody* body = nullptr;
 
 };
 

@@ -103,6 +103,9 @@ bool Player::Start() {
 	//Set initial position and velocity of the player
 	body->ctype = ColliderType::ENTITY;
 
+	rad = 50.0f;
+	angle = 0.0f;
+
 	return true;
 }
 
@@ -111,8 +114,7 @@ bool Player::Update()
 	if (!App->physics->pause)
 	{
 
-		float speed = PIXEL_TO_METERS(10);
-
+		float speed = PIXEL_TO_METERS(100);
 		if (state != DYING && state != SHOOTING)
 		{
 			//body->velocity = { 0,0 };
@@ -152,7 +154,6 @@ bool Player::Update()
 		}
 		if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN && state != SHOOTING)
 		{
-			objective = { position.x + 16, SCREEN_HEIGHT - position.y + 16 };
 			state = SHOOTING;
 		}
 
@@ -193,22 +194,30 @@ bool Player::Update()
 
 			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 			{
-				objective.y -= 10;
+				rad += 8;
+				if (rad > 400)
+				{
+					rad = 400;
+				}
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 			{
-				objective.y += 10;
+				rad -= 8;
+				if (rad < 8)
+				{
+					rad = 8;
+				}
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 			{
-				objective.x -= 10;
+				angle -= 0.1f;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 			{
-				objective.x += 10;
+				angle += 0.1f;
 			}
 
 
@@ -218,8 +227,7 @@ bool Player::Update()
 				state = IDLE;
 			}
 			//vector of the projectile in pixels
-			projectileVector = { objective.x - position.x + 16, objective.y - position.y + 16 };
-
+			projectileVector = { angleToPoint(rad, angle).x ,  angleToPoint(rad, angle).y };
 			break;
 		default:
 			break;
@@ -234,7 +242,8 @@ bool Player::Update()
 	App->renderer->Blit(texture, position.x, SCREEN_HEIGHT - position.y, &rect);
 	if (state == SHOOTING)
 	{
-		App->renderer->DrawLine(objective.x, objective.y, position.x + 16, SCREEN_HEIGHT - position.y + 16, 255, 255, 255);
+		App->renderer->DrawCircle(position.x + 16, SCREEN_HEIGHT - position.y + 16, rad, 255, 255, 255);
+		App->renderer->DrawLine(projectileVector.x + position.x + 16, projectileVector.y + SCREEN_HEIGHT - position.y + 16, position.x + 16, SCREEN_HEIGHT - position.y + 16, 255, 255, 255);
 	}
 
 	return true;
@@ -244,4 +253,16 @@ bool Player::CleanUp()
 {
 	App->textures->Unload(texture);
 	return true;
+}
+
+iPoint Player::angleToPoint(float radius, float angle)
+{
+	iPoint temp;
+	float sinus = SDL_sin(angle);
+	float cosinus = SDL_cos(angle);
+
+	temp.y = radius * sinus;
+	temp.x = radius * cosinus;
+	
+	return temp;
 }

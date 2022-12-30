@@ -121,6 +121,10 @@ public:
 		return stype;
 	}
 
+	float GetMass() {
+		return mass;
+	}
+
 	bool IsWater() {
 		return water;
 	}
@@ -174,10 +178,9 @@ public:
 	float dt = 1.0 / 60.0;
 
 	bool pause = false;
+	bool debug;
 
 private:
-
-	bool debug;
 
 	// Detect collision with water
 	bool is_colliding_with_water(p2List_item<PhysBody*>* element);

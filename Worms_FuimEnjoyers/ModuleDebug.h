@@ -14,6 +14,9 @@ public:
 	bool CleanUp();
 
 public:
-
+	bool gravityEnabled;
+	bool aerodynamiDragEnabled;
+	bool hydrodynamicDragEnabled;
+	bool hydrodynamicBuoyancyEnabled;
 
 };

@@ -30,13 +30,34 @@ public:
 		return body;
 	}
 
+	iVector getProjectile()
+	{
+		return projectileVector;
+	}
+
+	int getState()
+	{
+		return state;
+	}
+
+	float getRadius()
+	{
+		return rad;
+	}
+
+	float getAngle()
+	{
+		return angle;
+	}
+
+	iPoint angleToPoint(float radius, float angle);
+
 private:
 	
 	//L02: DONE 1: Declare player parameters
 	iPoint pos;
 	int w, h;
 
-	iPoint objective;
 	iVector projectileVector;
 
 	SDL_Texture* texture;
@@ -56,6 +77,9 @@ private:
 	int deathSound;
 	int state;
 	bool facing;
+
+	float rad;
+	float angle;
 
 };
 
