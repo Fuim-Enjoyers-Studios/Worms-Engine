@@ -20,5 +20,6 @@ public:
 	bool hydrodynamicBuoyancyEnabled;
 	bool pause;
 	bool debug;
+	bool debugSpeed;
 
 };

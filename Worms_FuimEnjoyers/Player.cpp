@@ -115,7 +115,13 @@ bool Player::Update()
 	{
 		return UPDATE_CONTINUE;
 	}
-	float speed = PIXEL_TO_METERS(100);
+	if (App->debug->debugSpeed) {
+		speed = PIXEL_TO_METERS(200);
+	}
+	else {
+		speed = PIXEL_TO_METERS(10);
+	}
+	
 	if (state != DYING && state != SHOOTING)
 	{
 		//body->velocity = { 0,0 };

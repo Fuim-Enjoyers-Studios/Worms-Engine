@@ -19,7 +19,7 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 	App->audio->PlayMusic("Assets/Audio/backgroundMusic.ogg");
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-	//background = App->textures->Load("Assets/Textures/intro.png");
+	background = App->textures->Load("Assets/Textures/background.png");
 
 	//create ground & water
 	ground1 = App->physics->CreateRectangle(-1.0f, 0.0f, 1.0f, 20.0f, BodyType::STATIC);
@@ -92,7 +92,7 @@ update_status ModuleSceneIntro::Update()
 		}
 
 	}
-	//App->renderer->Blit(background, 0, 0);
+	App->renderer->Blit(background, 1, -250);
 
 
 	return UPDATE_CONTINUE;

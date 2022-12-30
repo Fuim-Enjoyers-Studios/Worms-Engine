@@ -25,11 +25,13 @@ Application::Application()
 	AddModule(input);
 	AddModule(audio);
 	AddModule(fonts);
-	AddModule(entityManager);
 
 	// Scenes
 	AddModule(scene_intro);
 	AddModule(scene_Menu);
+
+	//entity manager here in order to render good the textures one in front of the other
+	AddModule(entityManager);
   
 	//Dbug info on screen
 	AddModule(debug);

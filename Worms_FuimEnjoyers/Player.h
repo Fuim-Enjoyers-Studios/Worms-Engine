@@ -49,6 +49,12 @@ public:
 	{
 		return angle;
 	}
+	float getSpeed() {
+		return speed;
+	}
+	void setSpeed(float speed1) {
+		speed = speed1;
+	}
 
 	iPoint angleToPoint(float radius, float angle);
 
@@ -77,6 +83,7 @@ private:
 	int deathSound;
 	int state;
 	bool facing;
+	float speed;
 
 	float rad;
 	float angle;

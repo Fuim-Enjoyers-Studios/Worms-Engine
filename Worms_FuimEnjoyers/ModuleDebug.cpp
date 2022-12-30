@@ -23,6 +23,7 @@ bool ModuleDebug::Start()
 	hydrodynamicBuoyancyEnabled = true;
 	pause = false;
 	debug = true;
+	debugSpeed = false;
 
 
 	App->fonts->Load("Assets/Fonts/sprite_font_white.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ ", 6);
@@ -79,6 +80,10 @@ update_status ModuleDebug::PostUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
 		if (hydrodynamicBuoyancyEnabled) { hydrodynamicBuoyancyEnabled = false; }
 		else if (!hydrodynamicBuoyancyEnabled) { hydrodynamicBuoyancyEnabled = true; }
+	}
+	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) {
+		if (debugSpeed) { debugSpeed = false; }
+		else if (!debugSpeed) { debugSpeed = true; }
 	}
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
 		if (pause) { pause = false; }
@@ -216,11 +221,17 @@ update_status ModuleDebug::PostUpdate()
 	else {
 		App->fonts->BlitText(20, 100, 0, "f6 hydrodynamic buoyancy: disabled");
 	}
-	if (pause) {
-		App->fonts->BlitText(20, 120, 0, "p pause: enabled");
+	if (debugSpeed) {
+		App->fonts->BlitText(20, 120, 0, "f7 debug player speed: enabled");
 	}
 	else {
-		App->fonts->BlitText(20, 120, 0, "p pause: disabled");
+		App->fonts->BlitText(20, 120, 0, "f7 debug player speed: disabled");
+	}
+	if (pause) {
+		App->fonts->BlitText(20, 180, 0, "p pause: enabled");
+	}
+	else {
+		App->fonts->BlitText(20, 180, 0, "p pause: disabled");
 	}
 	
 	
