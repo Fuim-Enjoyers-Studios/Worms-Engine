@@ -22,6 +22,9 @@ bool ModuleDebug::Start()
 	hydrodynamicDragEnabled = true;
 	hydrodynamicBuoyancyEnabled = true;
 
+
+	App->fonts->Load("Assets/Fonts/sprite_font_white.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ ", 6);
+
 	return ret;
 }
 
@@ -165,6 +168,10 @@ update_status ModuleDebug::PostUpdate()
 
 		element = element->next;
 	}
+
+	App->fonts->BlitText(20, 20, 0, "sexo");
+
+	
 	
 	return UPDATE_CONTINUE;
 }
