@@ -1,22 +1,16 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleDebug.h"
-
-
-
 ModuleDebug::ModuleDebug(bool start_enabled) : Module(start_enabled)
 {
 }
-
 ModuleDebug::~ModuleDebug()
 {}
-
 // Load assets
 bool ModuleDebug::Start()
 {
 	LOG("Loading DEBUG start");
 	bool ret = true;
-
 	gravityEnabled = true;
 	aerodynamicDragEnabled = true;
 	hydrodynamicDragEnabled = true;
@@ -26,34 +20,25 @@ bool ModuleDebug::Start()
 	debugSpeed = false;
 	deltaTime = DeltaTimeScheme::FIXED;
 	FPS = 60;
-
-
 	App->fonts->Load("Assets/Fonts/sprite_font_red.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ ", 6);
-
 	return ret;
 }
-
 // Load assets
 bool ModuleDebug::CleanUp()
 {
 	LOG("Unloading DEBUG");
-
 	return true;
 }
-
 // Update: draw background
 update_status ModuleDebug::Update()
 {
-	
 
 	return UPDATE_CONTINUE;
 }
-
 update_status ModuleDebug::PostUpdate()
 {	// Colors
 	int color_r, color_g, color_b;
 	//DRAW COLLIDERS OF ALL ELEMENTS OF THE WORLD
-
 	p2List_item<PhysBody*>* element = App->physics->world.Elements.getFirst();
 	while (element != NULL)
 	{
@@ -77,7 +62,6 @@ update_status ModuleDebug::PostUpdate()
 			{
 				color_r = 255; color_g = 0; color_b = 0;
 			}
-
 			// Draw element
 			if (element->data->GetShape() == ShapeType::CIRCLE)
 			{
@@ -85,7 +69,6 @@ update_status ModuleDebug::PostUpdate()
 				int pos_x = METERS_TO_PIXELS(element->data->position.x);
 				int pos_y = SCREEN_HEIGHT - METERS_TO_PIXELS(element->data->position.y);
 				int size_r = METERS_TO_PIXELS(element->data->radius);
-
 				App->renderer->DrawCircle(pos_x, pos_y, size_r, color_r, color_g, color_b);
 			}
 			else if (element->data->GetShape() == ShapeType::RECTANGLE)
@@ -103,7 +86,6 @@ update_status ModuleDebug::PostUpdate()
 			{
 				color_r = 255; color_g = 0; color_b = 0;
 			}
-
 			// Draw element
 			if (element->data->GetShape() == ShapeType::CIRCLE)
 			{
@@ -111,7 +93,6 @@ update_status ModuleDebug::PostUpdate()
 				int pos_x = METERS_TO_PIXELS(element->data->position.x);
 				int pos_y = SCREEN_HEIGHT - METERS_TO_PIXELS(element->data->position.y);
 				int size_r = METERS_TO_PIXELS(element->data->radius);
-
 				App->renderer->DrawCircle(pos_x, pos_y, size_r, color_r, color_g, color_b);
 			}
 			else if (element->data->GetShape() == ShapeType::RECTANGLE)
@@ -129,7 +110,6 @@ update_status ModuleDebug::PostUpdate()
 			{
 				color_r = 255; color_g = 0; color_b = 0;
 			}
-
 			// Draw element
 			if (element->data->GetShape() == ShapeType::CIRCLE)
 			{
@@ -137,7 +117,6 @@ update_status ModuleDebug::PostUpdate()
 				int pos_x = METERS_TO_PIXELS(element->data->position.x);
 				int pos_y = SCREEN_HEIGHT - METERS_TO_PIXELS(element->data->position.y);
 				int size_r = METERS_TO_PIXELS(element->data->radius);
-
 				App->renderer->DrawCircle(pos_x, pos_y, size_r, color_r, color_g, color_b);
 			}
 			else if (element->data->GetShape() == ShapeType::RECTANGLE)
@@ -145,7 +124,6 @@ update_status ModuleDebug::PostUpdate()
 				App->renderer->DrawQuad(element->data->pixelRect(), color_r, color_g, color_b, 255U, false);
 			}
 		}
-
 		element = element->next;
 	}
 	//debug keys for activating and dactivating things
@@ -215,14 +193,6 @@ update_status ModuleDebug::PostUpdate()
 		if (pause) { pause = false; }
 		else if (!pause) { pause = true; }
 	}
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-	{
-		App->renderer->camera.y += 10;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	{
-		App->renderer->camera.y -= 10;
-  }
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
 		if (App->scene_intro->actualPlayer->data->getIndex() != 1)
 		{
@@ -281,7 +251,7 @@ update_status ModuleDebug::PostUpdate()
 				App->scene_intro->actualPlayer = App->scene_intro->players.getFirst();
 			}
 		}
-
+	}
 	//debug text 
 	App->fonts->BlitText(20, 3, 0, "f1 to deactivate debug menu");
 	if (App->scene_intro->actualPlayer->data->getBody()->ArePhysicsEnabled() == true) {
@@ -354,11 +324,11 @@ update_status ModuleDebug::PostUpdate()
 	}
 	sprintf_s(radiusText, 4, "%d", App->scene_intro->actualPlayer->data->getRadius());
 	App->fonts->BlitText(20, 220, 0, "actual player shooting radius: ");
-	App->fonts->BlitText(265, 220,0, radiusText);
+	App->fonts->BlitText(265, 220, 0, radiusText);
 
 	sprintf_s(angleText, 11, "%f", RADTODEG * abs(App->scene_intro->actualPlayer->data->getAngle()));
 	App->fonts->BlitText(20, 240, 0, "actual player shooting angle: ");
 	App->fonts->BlitText(255, 240, 0, angleText);
-	
+
 	return UPDATE_CONTINUE;
 }
