@@ -18,10 +18,11 @@ bool ModuleDebug::Start()
 	bool ret = true;
 
 	gravityEnabled = true;
-	aerodynamiDragEnabled = true;
+	aerodynamicDragEnabled = true;
 	hydrodynamicDragEnabled = true;
 	hydrodynamicBuoyancyEnabled = true;
 	pause = false;
+	debug = true;
 
 
 	App->fonts->Load("Assets/Fonts/sprite_font_white.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ ", 6);
@@ -47,8 +48,12 @@ update_status ModuleDebug::Update()
 
 update_status ModuleDebug::PostUpdate()
 {
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
+		debug = !debug;
+	}
 	//debug keys for activating and dactivating things
-	if (!App->physics->debug) {
+	if (!debug) {
+		App->fonts->BlitText(20, 3, 0, "f1 to activate debug menu");
 		return UPDATE_CONTINUE;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
@@ -64,8 +69,8 @@ update_status ModuleDebug::PostUpdate()
 		else if (!gravityEnabled) { gravityEnabled = true; }
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
-		if (aerodynamiDragEnabled) { aerodynamiDragEnabled = false; }
-		else if (!aerodynamiDragEnabled) { aerodynamiDragEnabled = true; }
+		if (aerodynamicDragEnabled) { aerodynamicDragEnabled = false; }
+		else if (!aerodynamicDragEnabled) { aerodynamicDragEnabled = true; }
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
 		if (hydrodynamicDragEnabled) { hydrodynamicDragEnabled = false; }
@@ -178,8 +183,46 @@ update_status ModuleDebug::PostUpdate()
 		element = element->next;
 	}
 
-	App->fonts->BlitText(20, 20, 0, "sexo");
+	//debug text 
 
+	App->fonts->BlitText(20, 3, 0, "f1 to deactivate debug menu");
+	if (App->scene_intro->player1->getBody()->ArePhysicsEnabled() == true) {
+		App->fonts->BlitText(20, 20, 0, "f2 player physics: enabled");
+	}
+	else {
+		App->fonts->BlitText(20, 20, 0, "f2 player physics: disabled");
+	}
+	if (gravityEnabled) {
+		App->fonts->BlitText(20, 40, 0, "f3 gravity: enabled");
+	}
+	else {
+		App->fonts->BlitText(20, 40, 0, "f3 gravity: disabled");
+	}
+	if (aerodynamicDragEnabled) {
+		App->fonts->BlitText(20, 60, 0, "f4 aerodynamic drag: enabled");
+	}
+	else {
+		App->fonts->BlitText(20, 60, 0, "f4 aerodynamic drag: disabled");
+	}
+	if (hydrodynamicDragEnabled) {
+		App->fonts->BlitText(20, 80, 0, "f5 hydrodynamic drag: enabled");
+	}
+	else {
+		App->fonts->BlitText(20, 80, 0, "f5 hydrodynamic drag: disabled");
+	}
+	if (hydrodynamicBuoyancyEnabled) {
+		App->fonts->BlitText(20, 100, 0, "f6 hydrodynamic buoyancy: enabled");
+	}
+	else {
+		App->fonts->BlitText(20, 100, 0, "f6 hydrodynamic buoyancy: disabled");
+	}
+	if (pause) {
+		App->fonts->BlitText(20, 120, 0, "p pause: enabled");
+	}
+	else {
+		App->fonts->BlitText(20, 120, 0, "p pause: disabled");
+	}
+	
 	
 	
 	return UPDATE_CONTINUE;

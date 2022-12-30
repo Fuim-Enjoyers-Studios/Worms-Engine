@@ -46,6 +46,7 @@ update_status ModuleSceneMenu::Update()
 		this->Disable();
 		App->scene_intro->Enable();
 		App->physics->Enable();
+		App->debug->Enable();
 	}
 
 	return UPDATE_CONTINUE;

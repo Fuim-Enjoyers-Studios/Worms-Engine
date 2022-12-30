@@ -15,9 +15,10 @@ public:
 
 public:
 	bool gravityEnabled;
-	bool aerodynamiDragEnabled;
+	bool aerodynamicDragEnabled;
 	bool hydrodynamicDragEnabled;
 	bool hydrodynamicBuoyancyEnabled;
 	bool pause;
+	bool debug;
 
 };

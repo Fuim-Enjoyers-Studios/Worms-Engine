@@ -11,7 +11,7 @@ Application::Application()
 	scene_Menu = new ModuleSceneMenu(true);
 	physics = new ModulePhysics(false);
 	fonts = new ModuleFonts();
-	debug = new ModuleDebug();
+	debug = new ModuleDebug(false);
 	entityManager = new EntityManager();
 
 	// The order of calls is very important!

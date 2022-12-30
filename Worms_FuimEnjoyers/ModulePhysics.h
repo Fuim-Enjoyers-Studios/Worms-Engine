@@ -175,7 +175,6 @@ public:
 	//Time between frames
 	float dt = 1.0 / 60.0;
 
-	bool debug;
 
 private:
 

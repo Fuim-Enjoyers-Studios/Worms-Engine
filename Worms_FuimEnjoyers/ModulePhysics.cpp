@@ -6,7 +6,6 @@
 
 ModulePhysics::ModulePhysics(bool start_enabled) : Module(start_enabled)
 {
-	debug = true;
 }
 
 // Destructor
@@ -19,7 +18,6 @@ bool ModulePhysics::Start()
 	LOG("Creating Physics 2D environment");
 
 	world.atmosphere.density = 1.0f;
-	debug = true;
 	world.atmosphere.windx = 0.0f;
 	world.atmosphere.windy = 0.0f;
 
@@ -68,7 +66,7 @@ update_status ModulePhysics::PreUpdate()
 			{
 				p2Point<float> dforce;
 				dforce.x = 0.0f, dforce.y = 0.0f;
-				if (App->debug->aerodynamiDragEnabled) {
+				if (App->debug->aerodynamicDragEnabled) {
 					dforce = compute_aerodynamic_drag(dforce, element);
 				}
 				element->data->force += dforce; // Add this force to element's total force
@@ -148,9 +146,8 @@ update_status ModulePhysics::PreUpdate()
 // 
 update_status ModulePhysics::PostUpdate()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
-		debug = !debug;
-	}
+	
+	//App->fonts->BlitText()
 
 	return UPDATE_CONTINUE;
 }
