@@ -207,6 +207,14 @@ update_status ModuleDebug::PostUpdate()
 		if (pause) { pause = false; }
 		else if (!pause) { pause = true; }
 	}
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	{
+		App->renderer->camera.y += 10;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		App->renderer->camera.y -= 10;
+  }
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
 		if (App->scene_intro->actualPlayer->data->getIndex() != 1)
 		{
@@ -265,7 +273,6 @@ update_status ModuleDebug::PostUpdate()
 				App->scene_intro->actualPlayer = App->scene_intro->players.getFirst();
 			}
 		}
-	}
 
 	//debug text 
 	App->fonts->BlitText(20, 3, 0, "f1 to deactivate debug menu");
