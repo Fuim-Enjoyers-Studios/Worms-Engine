@@ -51,7 +51,6 @@ public:
 	PhysBody* ground3;
 	PhysBody* ground4;
 	PhysBody* water;
-	Player* player1;
 
 	SDL_Texture* tex_light_tiny;
 	SDL_Texture* tex_light_medium;
@@ -66,4 +65,6 @@ public:
 	uint player_lose_fx;
 
 	p2List<Projectile*> projectiles;
+	p2List<Player*> players;
+	p2List_item<Player*>* actualPlayer;
 };

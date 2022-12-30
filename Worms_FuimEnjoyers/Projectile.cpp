@@ -34,7 +34,7 @@ bool Projectile::Start() {
 
 	body->ctype = ColliderType::SHOT;
 
-	body->SetVelocity(speed * PIXEL_TO_METERS(App->scene_intro->player1->getProjectile().x),speed * -(PIXEL_TO_METERS(App->scene_intro->player1->getProjectile().y)));
+	body->SetVelocity(speed * PIXEL_TO_METERS(App->scene_intro->actualPlayer->data->getProjectile().x),speed * -(PIXEL_TO_METERS(App->scene_intro->actualPlayer->data->getProjectile().y)));
 	return true;
 }
 

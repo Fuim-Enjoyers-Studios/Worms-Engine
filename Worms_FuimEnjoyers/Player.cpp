@@ -105,13 +105,15 @@ bool Player::Start() {
 
 	rad = 50.0f;
 	angle = 0.0f;
+	turn = false;
+	state = IDLE;
 
 	return true;
 }
 
 bool Player::Update()
 {
-	if (App->debug->pause == true)
+	if (App->debug->pause)
 	{
 		return UPDATE_CONTINUE;
 	}
@@ -137,32 +139,35 @@ bool Player::Update()
 			body->velocity.y = speed;
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-			body->velocity.y = -speed;
-		}
+			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+				body->velocity.y = -speed;
+			}
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			state = WALK;
-			facing = FACING_LEFT;
-			body->velocity.x = -speed;
-		}
+			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+				state = WALK;
+				facing = FACING_LEFT;
+				body->velocity.x = -speed;
+			}
 
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			state = WALK;
-			facing = FACING_RIGHT;
-			body->velocity.x = speed;
-		}
+			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+				state = WALK;
+				facing = FACING_RIGHT;
+				body->velocity.x = speed;
+			}
 
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		{
-			state = DYING;
-			App->audio->PlayFx(deathSound);
+			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+			{
+				state = DYING;
+				App->audio->PlayFx(deathSound);
+			}
+			if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+			{
+				state = SHOOTING;
+			}
 		}
+		
 	}
-	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN && state != SHOOTING)
-	{
-		state = SHOOTING;
-	}
+	
 
 	switch (state)
 	{

@@ -58,11 +58,11 @@ update_status ModuleDebug::PostUpdate()
 		return UPDATE_CONTINUE;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
-		if (App->scene_intro->player1->getBody()->ArePhysicsEnabled() == true) {
-			App->scene_intro->player1->getBody()->DisablePhysics();
+		if (App->scene_intro->actualPlayer->data->getBody()->ArePhysicsEnabled() == true) {
+			App->scene_intro->actualPlayer->data->getBody()->DisablePhysics();
 		}
 		else {
-			App->scene_intro->player1->getBody()->EnablePhysics();
+			App->scene_intro->actualPlayer->data->getBody()->EnablePhysics();
 		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {

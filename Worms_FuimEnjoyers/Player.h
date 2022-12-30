@@ -56,6 +56,30 @@ public:
 		speed = speed1;
 	}
 
+	void setIndex(int i)
+	{
+		index = i;
+	}
+	void setState(int i)
+	{
+		state = i;
+	}
+
+	int getIndex()
+	{
+		return index;
+	}
+
+	void playerTurn()
+	{
+		turn = true;
+	}
+
+	void endTurn()
+	{
+		turn = false;
+	}
+
 	iPoint angleToPoint(float radius, float angle);
 
 private:
@@ -87,6 +111,9 @@ private:
 
 	float rad;
 	float angle;
+
+	bool turn;
+	int index;
 
 };
 

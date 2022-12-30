@@ -2,6 +2,12 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 
+#define IDLE 1
+#define WALK 2
+#define JUMPING 3
+#define DYING 4
+#define SHOOTING 5
+
 
 
 ModuleSceneIntro::ModuleSceneIntro(bool start_enabled) : Module(start_enabled)
@@ -38,7 +44,23 @@ bool ModuleSceneIntro::Start()
 
 	//Create entity
 	//creating 1 player
-	player1 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer1.png", { METERS_TO_PIXELS(1.5), METERS_TO_PIXELS(3.5f) });
+	Player* player1 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer1.png", { METERS_TO_PIXELS(1.5), METERS_TO_PIXELS(3.5f) });
+	player1->setIndex(1);
+	players.add(player1);
+
+	Player* player2 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer2.png", { METERS_TO_PIXELS(2.5), METERS_TO_PIXELS(3.5f) });
+	player2->setIndex(2);
+	players.add(player2);
+
+	Player* player3 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer3.png", { METERS_TO_PIXELS(3.5), METERS_TO_PIXELS(3.5f) });
+	player3->setIndex(3);
+	players.add(player3);
+
+	Player* player4 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer4.png", { METERS_TO_PIXELS(4.5), METERS_TO_PIXELS(3.5f) });
+	player4->setIndex(4);
+	players.add(player4);
+
+	actualPlayer = players.getFirst();
 
 	return ret;
 }
@@ -82,15 +104,43 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->camera.x += speed;
 	}
 
-	//projectile
-	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
-	{
-		//if player state is shooting
-		if (player1->getState() == 5 ) {
-			Projectile* projectile = (Projectile*)App->entityManager->CreateEntity(EntityType::PROJECTILE, "Assets/Textures/shotplayer1.png", player1->position);
-			projectiles.add(projectile);
-		}
 
+	actualPlayer->data->playerTurn();
+
+
+	//projectile
+	if ((App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) && (actualPlayer->data->getState() == SHOOTING))
+	{
+		Projectile* projectile;
+		switch (actualPlayer->data->getIndex())
+		{
+		case 1:
+			projectile = (Projectile*)App->entityManager->CreateEntity(EntityType::PROJECTILE, "Assets/Textures/shotplayer1.png", actualPlayer->data->position);
+			break;
+		case 2:
+			projectile = (Projectile*)App->entityManager->CreateEntity(EntityType::PROJECTILE, "Assets/Textures/shotplayer2.png", actualPlayer->data->position);
+			break;
+		case 3:
+			projectile = (Projectile*)App->entityManager->CreateEntity(EntityType::PROJECTILE, "Assets/Textures/shotplayer3.png", actualPlayer->data->position);
+			break;
+		case 4:
+			projectile = (Projectile*)App->entityManager->CreateEntity(EntityType::PROJECTILE, "Assets/Textures/shotplayer4.png", actualPlayer->data->position);
+			break;
+		default:
+			break;
+		}
+		
+		projectiles.add(projectile);
+		actualPlayer->data->endTurn();
+		actualPlayer->data->setState(IDLE);
+		if (actualPlayer->next != NULL)
+		{
+			actualPlayer = actualPlayer->next;
+		}
+		else
+		{
+			actualPlayer = players.getFirst();
+		}
 	}
 	App->renderer->Blit(background, 1, -250);
 
