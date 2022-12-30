@@ -132,6 +132,10 @@ update_status ModulePhysics::PreUpdate()
 					collision_solver(element, element_to_check);
 				}
 
+				if (are_colliding(element, element_to_check)) {
+					element->data->collisions.add(element_to_check->data->ctype);
+				}
+
 				//Next element of the world
 				element_to_check = element_to_check->next;
 			}
@@ -146,8 +150,12 @@ update_status ModulePhysics::PreUpdate()
 // 
 update_status ModulePhysics::PostUpdate()
 {
-	
-	//App->fonts->BlitText()
+	p2List_item<PhysBody*>* element = world.Elements.getFirst();
+	// Process all elements in the world to clear the collisions stored of the last frame
+	while (element != NULL) {
+		element->data->collisions.clear();
+		element = element->next;
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -533,5 +541,15 @@ void ModulePhysics::collision_solver(p2List_item<PhysBody*>* element, p2List_ite
 			// TP element to ground bottom
 			element->data->position.y = element_to_check->data->position.y - element->data->h;
 		}
+	}
+}
+
+void ModulePhysics::DeleteElementOfWorld() {
+	p2List_item<PhysBody*>* to_delete = world.ElementsToDelete.getFirst();
+	while (to_delete != NULL)
+	{
+		world.Elements.del(to_delete);
+		world.ElementsToDelete.del(to_delete);
+		to_delete = to_delete->next;
 	}
 }
