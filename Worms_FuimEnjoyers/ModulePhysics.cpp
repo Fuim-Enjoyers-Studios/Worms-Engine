@@ -154,6 +154,7 @@ update_status ModulePhysics::PostUpdate()
 	// Process all elements in the world to clear the collisions stored of the last frame
 	while (element != NULL) {
 		element->data->collisions.clear();
+		element = element->next;
 	}
 
 	return UPDATE_CONTINUE;
