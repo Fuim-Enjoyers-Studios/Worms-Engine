@@ -46,6 +46,11 @@ public:
 	SDL_Texture* graphics;
 	SDL_Texture* background;
 
+	PhysBody* ground1;
+	PhysBody* ground2;
+	PhysBody* ground3;
+	PhysBody* ground4;
+	PhysBody* water;
 	Player* player1;
 
 	SDL_Texture* tex_light_tiny;

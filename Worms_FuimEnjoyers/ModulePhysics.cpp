@@ -122,20 +122,7 @@ update_status ModulePhysics::PreUpdate()
 			while (element_to_check != NULL)
 			{
 				if (element_to_check->data->ctype == ColliderType::GROUND && are_colliding(element, element_to_check)) {
-					// TP ball to ground surface
-					if (element->data->GetShape() == ShapeType::CIRCLE) {
-						element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + element->data->radius;
-					}
-					else if (element->data->GetShape() == ShapeType::RECTANGLE) {
-						element->data->position.y = element_to_check->data->position.y + element_to_check->data->h;
-					}
-
-					// Elastic bounce with ground
-					element->data->velocity.y = -element->data->velocity.y;
-
-					// FUYM non-elasticity
-					element->data->velocity.x *= element->data->coef_friction;
-					element->data->velocity.y *= element->data->coef_restitution;
+					collision_solver(element, element_to_check);
 				}
 
 				//Next element of the world
@@ -384,10 +371,18 @@ p2Point<float> ModulePhysics::compute_hydrodynamic_drag(p2Point<float> dforce, p
 {
 	float rel_vel[2] = { element->data->velocity.x - water->data->velocity.x, element->data->velocity.y - water->data->velocity.y }; // Relative velocity
 	float speed = modulus(rel_vel[0], rel_vel[1]); // Modulus of the relative velocity
-	float rel_vel_unitary[2] = { rel_vel[0] / speed, rel_vel[1] / speed }; // Unitary vector of relative velocity
-	float fdrag_modulus = element->data->b * speed; // Drag force (modulus)
-	dforce.x = -rel_vel_unitary[0] * fdrag_modulus; // Drag is antiparallel to relative velocity
-	dforce.y = -rel_vel_unitary[1] * fdrag_modulus; // Drag is antiparallel to relative velocity
+	if (speed != 0) {
+		float rel_vel_unitary[2] = { rel_vel[0] / speed, rel_vel[1] / speed }; // Unitary vector of relative velocity
+		float fdrag_modulus = element->data->b * speed; // Drag force (modulus)
+		dforce.x = -rel_vel_unitary[0] * fdrag_modulus; // Drag is antiparallel to relative velocity
+		dforce.y = -rel_vel_unitary[1] * fdrag_modulus; // Drag is antiparallel to relative velocity
+	}
+	else {
+		float rel_vel_unitary[2] = { 0, 0 }; // Unitary vector of relative velocity
+		float fdrag_modulus = element->data->b * speed; // Drag force (modulus)
+		dforce.x = -rel_vel_unitary[0] * fdrag_modulus; // Drag is antiparallel to relative velocity
+		dforce.y = -rel_vel_unitary[1] * fdrag_modulus; // Drag is antiparallel to relative velocity
+	}
 
 	return dforce;
 }
@@ -395,17 +390,32 @@ p2Point<float> ModulePhysics::compute_hydrodynamic_drag(p2Point<float> dforce, p
 // Compute Hydrodynamic Buoyancy force
 p2Point<float> ModulePhysics::compute_hydrodynamic_buoyancy(p2Point<float> bforce, p2List_item<PhysBody*>* element, p2List_item<PhysBody*>* water)
 {
-	// Compute submerged area (assume ball is a rectangle, for simplicity)
-	float water_top_level = water->data->position.y + water->data->h; // Water top level y
-	float h = 2.0f * element->data->radius; // Ball "hitbox" height
-	float surf = h * (water_top_level - element->data->position.y); // Submerged surface
-	if ((element->data->position.y + element->data->radius) < water_top_level) surf = h * h; // If ball completely submerged, use just all ball area
-	surf *= 0.4; // FUYM to adjust values (should compute the area of circle segment correctly instead)
+	if (element->data->GetShape() == ShapeType::CIRCLE) {
+		// Compute submerged area (assume is a rectangle, for simplicity)
+		float water_top_level = water->data->position.y + water->data->h; // Water top level y
+		float h = 2.0f * element->data->radius; // Element "hitbox" height
+		float surf = h * (water_top_level - element->data->position.y); // Submerged surface
+		if ((element->data->position.y + element->data->radius) < water_top_level) surf = h * h; // If completely submerged, use just all element area
+		surf *= 0.4; // FUYM to adjust values (should compute the area of circle segment correctly instead)
 
-	// Compute Buoyancy force
-	double fbuoyancy_modulus = water->data->density * 10.0 * surf; // Buoyancy force (modulus)
-	bforce.x = 0.0; // Buoyancy is parallel to pressure gradient
-	bforce.y = fbuoyancy_modulus; // Buoyancy is parallel to pressure gradient
+		// Compute Buoyancy force
+		double fbuoyancy_modulus = water->data->density * 10.0 * surf; // Buoyancy force (modulus)
+		bforce.x = 0.0; // Buoyancy is parallel to pressure gradient
+		bforce.y = fbuoyancy_modulus; // Buoyancy is parallel to pressure gradient
+	}
+	else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+		// Compute submerged area
+		float water_top_level = water->data->position.y + water->data->h; // Water top level y
+		float h = element->data->h; // Element "hitbox" height
+		float surf = h * (water_top_level - element->data->position.y); // Submerged surface
+		if ((element->data->position.y + (element->data->h / 2)) < water_top_level) surf = h * h; // If completely submerged, use just all element area
+		surf *= 0.4; // FUYM to adjust values (should compute the area of circle segment correctly instead)
+
+		// Compute Buoyancy force
+		double fbuoyancy_modulus = water->data->density * 10.0 * surf; // Buoyancy force (modulus)
+		bforce.x = 0.0; // Buoyancy is parallel to pressure gradient
+		bforce.y = fbuoyancy_modulus; // Buoyancy is parallel to pressure gradient
+	}
 
 	return bforce;
 }
@@ -417,4 +427,87 @@ void ModulePhysics::integrator_velocity_verlet(p2List_item<PhysBody*>* element)
 	element->data->position.y += element->data->velocity.y * dt + 0.5f * element->data->acceleration.y * dt * dt;
 	element->data->velocity.x += element->data->acceleration.x * dt;
 	element->data->velocity.y += element->data->acceleration.y * dt;
+}
+
+void ModulePhysics::collision_solver(p2List_item<PhysBody*>* element, p2List_item<PhysBody*>* element_to_check) {
+	if (((element_to_check->data->position.y + (element_to_check->data->h / 2)) < (element->data->position.y + (element->data->h / 2))) && ((abs((element->data->position.x) - ((element_to_check->data->position.x) + ((element_to_check->data->w)/2))) < ((element_to_check->data->w) / 2)) && (abs(((element->data->position.x) + (element->data->w)) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)))) {
+		// TP ball to ground surface
+		if (element->data->GetShape() == ShapeType::CIRCLE) {
+			element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + element->data->radius;
+		}
+		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+			element->data->position.y = element_to_check->data->position.y + element_to_check->data->h;
+		}
+
+		// Elastic bounce with ground
+		element->data->velocity.y = -element->data->velocity.y;
+
+		// FUYM non-elasticity
+		element->data->velocity.x *= element->data->coef_friction;
+		element->data->velocity.y *= element->data->coef_restitution;
+	}
+	else if (((element_to_check->data->position.y + (element_to_check->data->h / 2)) >= (element->data->position.y + (element->data->h / 2))) && ((abs((element->data->position.x) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)) && (abs(((element->data->position.x) + (element->data->w)) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)))) {
+		// TP ball to ground bottom
+		if (element->data->GetShape() == ShapeType::CIRCLE) {
+			element->data->position.y = element_to_check->data->position.y - element->data->radius;
+		}
+		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+			element->data->position.y = element_to_check->data->position.y - element->data->h;
+		}
+	}
+	else if (((element_to_check->data->position.x + (element_to_check->data->w / 2)) < (element->data->position.x + (element->data->w / 2))) && ((abs((element->data->position.y) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)) && (abs(((element->data->position.y) + (element->data->h)) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)))) {
+		// TP ball to ground left
+		if (element->data->GetShape() == ShapeType::CIRCLE) {
+			element->data->position.x = element_to_check->data->position.x + element_to_check->data->w + element->data->radius;
+		}
+		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+			element->data->position.x = element_to_check->data->position.x + element_to_check->data->w;
+		}
+
+		// Elastic bounce with ground
+		element->data->velocity.x = -element->data->velocity.x;
+
+		// FUYM non-elasticity
+		element->data->velocity.y *= element->data->coef_friction;
+	}
+	else if (((element_to_check->data->position.x + (element_to_check->data->w / 2)) >= (element->data->position.x + (element->data->w / 2))) && ((abs((element->data->position.y) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)) && (abs(((element->data->position.y) + (element->data->h)) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)))) {
+		// TP ball to ground right
+		if (element->data->GetShape() == ShapeType::CIRCLE) {
+			element->data->position.x = element_to_check->data->position.x - element->data->radius;
+		}
+		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+			element->data->position.x = element_to_check->data->position.x;
+		}
+
+		// Elastic bounce with ground
+		element->data->velocity.x = -element->data->velocity.x;
+
+		// FUYM non-elasticity
+		element->data->velocity.y *= element->data->coef_friction;
+	}
+	else if ((element_to_check->data->position.y + (element_to_check->data->h / 2)) < (element->data->position.y + (element->data->h / 2))) {
+		// TP ball to ground surface
+		if (element->data->GetShape() == ShapeType::CIRCLE) {
+			element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + element->data->radius;
+		}
+		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+			element->data->position.y = element_to_check->data->position.y + element_to_check->data->h;
+		}
+
+		// Elastic bounce with ground
+		element->data->velocity.y = -element->data->velocity.y;
+
+		// FUYM non-elasticity
+		element->data->velocity.x *= element->data->coef_friction;
+		element->data->velocity.y *= element->data->coef_restitution;
+	}
+	else if ((element_to_check->data->position.y + (element_to_check->data->h / 2)) >= (element->data->position.y + (element->data->h / 2))) {
+		// TP ball to ground bottom
+		if (element->data->GetShape() == ShapeType::CIRCLE) {
+			element->data->position.y = element_to_check->data->position.y - element->data->radius;
+		}
+		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+			element->data->position.y = element_to_check->data->position.y - element->data->h;
+		}
+	}
 }
