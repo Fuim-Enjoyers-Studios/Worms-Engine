@@ -40,7 +40,7 @@ public:
 		return state;
 	}
 
-	float getRadius()
+	int getRadius()
 	{
 		return rad;
 	}
@@ -54,6 +54,10 @@ public:
 	}
 	void setSpeed(float speed1) {
 		speed = speed1;
+	}
+	void setAngle(float angle1)
+	{
+		angle = angle1;
 	}
 
 	void setIndex(int i)
@@ -109,7 +113,7 @@ private:
 	bool facing;
 	float speed;
 
-	float rad;
+	int rad;
 	float angle;
 
 	bool turn;

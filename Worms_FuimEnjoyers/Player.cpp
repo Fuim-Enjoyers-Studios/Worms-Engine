@@ -239,6 +239,9 @@ bool Player::Update()
 			state = IDLE;
 		}
 		//vector of the projectile in pixels
+		if (angle * RADTODEG > 360 || angle*RADTODEG < -360) {
+			angle = 0;
+		}
 		projectileVector = { angleToPoint(rad, angle).x ,  angleToPoint(rad, angle).y };
 		break;
 	default:

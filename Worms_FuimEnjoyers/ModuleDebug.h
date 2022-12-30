@@ -22,4 +22,8 @@ public:
 	bool debug;
 	bool debugSpeed;
 
+
+	char radiusText[10] = { "\0" };
+	char angleText[11] = { "\0" };
+
 };
