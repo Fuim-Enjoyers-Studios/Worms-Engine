@@ -21,7 +21,7 @@ Player::Player(const char* path, iPoint posi) : Entity(EntityType::PLAYER)
 	IdleAnimation.PushBack({ 3 * 32,0 * 32,32,32 });
 	IdleAnimation.PushBack({ 4 * 32,0 * 32,32,32 });
 	IdleAnimation.loop = true;
-	IdleAnimation.speed = 0.07f;
+	IdleAnimation.speed = 0.1f;
 
 	WalkRightAnimation.PushBack({ 0 * 32,1 * 32,32,32 });
 	WalkRightAnimation.PushBack({ 1 * 32,1 * 32,32,32 });
@@ -30,7 +30,7 @@ Player::Player(const char* path, iPoint posi) : Entity(EntityType::PLAYER)
 	WalkRightAnimation.PushBack({ 4 * 32,1 * 32,32,32 });
 	WalkRightAnimation.PushBack({ 5 * 32,1 * 32,32,32 });
 	WalkRightAnimation.loop = true;
-	WalkRightAnimation.speed = 0.07f;
+	WalkRightAnimation.speed = 0.12f;
 
 	WalkLeftAnimation.PushBack({ 0 * 32,2 * 32,32,32 });
 	WalkLeftAnimation.PushBack({ 1 * 32,2 * 32,32,32 });
@@ -39,7 +39,7 @@ Player::Player(const char* path, iPoint posi) : Entity(EntityType::PLAYER)
 	WalkLeftAnimation.PushBack({ 4 * 32,2 * 32,32,32 });
 	WalkLeftAnimation.PushBack({ 5 * 32,2 * 32,32,32 });
 	WalkLeftAnimation.loop = true;
-	WalkLeftAnimation.speed = 0.07f;
+	WalkLeftAnimation.speed = 0.12f;
 
 	JumpRightAnimation.PushBack({ 0 * 32,1 * 32,32,32 });
 	JumpRightAnimation.PushBack({ 0 * 32,3 * 32,32,32 });
@@ -47,9 +47,10 @@ Player::Player(const char* path, iPoint posi) : Entity(EntityType::PLAYER)
 	JumpRightAnimation.PushBack({ 2 * 32,3 * 32,32,32 });
 	JumpRightAnimation.PushBack({ 3 * 32,3 * 32,32,32 });
 	JumpRightAnimation.PushBack({ 4 * 32,3 * 32,32,32 });
+	JumpRightAnimation.PushBack({ 4 * 32,3 * 32,32,32 });
 	JumpRightAnimation.PushBack({ 5 * 32,3 * 32,32,32 });
-	JumpRightAnimation.loop = true;
-	JumpRightAnimation.speed = 0.07f;
+	JumpRightAnimation.loop = false;
+	JumpRightAnimation.speed = 0.15f;
 
 	JumpLeftAnimation.PushBack({ 0 * 32,2 * 32,32,32 });
 	JumpLeftAnimation.PushBack({ 0 * 32,4 * 32,32,32 });
@@ -57,9 +58,10 @@ Player::Player(const char* path, iPoint posi) : Entity(EntityType::PLAYER)
 	JumpLeftAnimation.PushBack({ 2 * 32,4 * 32,32,32 });
 	JumpLeftAnimation.PushBack({ 3 * 32,4 * 32,32,32 });
 	JumpLeftAnimation.PushBack({ 4 * 32,4 * 32,32,32 });
+	JumpLeftAnimation.PushBack({ 4 * 32,4 * 32,32,32 });
 	JumpLeftAnimation.PushBack({ 5 * 32,4 * 32,32,32 });
-	JumpLeftAnimation.loop = true;
-	JumpLeftAnimation.speed = 0.07f;
+	JumpLeftAnimation.loop = false;
+	JumpLeftAnimation.speed = 0.15f;
 
 	DeathAnimation.PushBack({ 0 * 32,5 * 32,32,32 });
 	DeathAnimation.PushBack({ 1 * 32,5 * 32,32,32 });
@@ -108,12 +110,43 @@ bool Player::Start() {
 	angle = 0.0f;
 	turn = false;
 	state = IDLE;
+	canJump = true;
 
 	return true;
 }
 
 bool Player::Update()
 {
+	p2List_item<ColliderType>* collision = body->collisions.getFirst();
+
+	while (collision != NULL) {
+		switch (collision->data)
+		{
+		case ColliderType::ENTITY:
+			break;
+		case ColliderType::GROUND:
+			state = IDLE;
+			canJump = true;
+			break;
+		case ColliderType::WATER:
+			if (!App->debug->debug)
+			{
+				state = DYING;
+			}
+			break;
+		case ColliderType::SHOT:
+			state = DYING;
+			break;
+		case ColliderType::GRENADE:
+			break;
+		case ColliderType::UNKNOWN:
+			break;
+		default:
+			break;
+		}
+	    collision = collision->next;
+	}
+
 	if (App->debug->pause)
 	{
 		return UPDATE_CONTINUE;
@@ -122,12 +155,13 @@ bool Player::Update()
 		speed = PIXEL_TO_METERS(200);
 	}
 	else {
-		speed = PIXEL_TO_METERS(10);
+		speed = PIXEL_TO_METERS(20);
+		speedJump = PIXEL_TO_METERS(200);
 	}
 
 	if (turn)
 	{
-		if (state != DYING && state != SHOOTING && state != WAITING)
+		if (state != DYING && state != SHOOTING && state != WAITING && state != JUMPING)
 		{
 			//body->velocity = { 0,0 };
 			state = IDLE;
@@ -136,16 +170,6 @@ bool Player::Update()
 			//error: player is always moving to the right for no reason
 			//to do: in each input it applies the speed, we must write somewhere... 
 			//...what woule be the final velocity, and at the end of the update apply it
-			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-			{
-				//body->position.y -= speed;
-				body->velocity.y = speed;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-				body->velocity.y = -speed;
-			}
-
 			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 				state = WALK;
 				facing = FACING_LEFT;
@@ -157,12 +181,14 @@ bool Player::Update()
 				facing = FACING_RIGHT;
 				body->velocity.x = speed;
 			}
-
-			/*if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && canJump)
 			{
-				state = DYING;
-				App->audio->PlayFx(deathSound);
-			}*/
+				state = JUMPING;
+				body->velocity.y = speedJump;
+				canJump = false;
+				JumpLeftAnimation.Reset();
+				JumpRightAnimation.Reset();
+			}
 			if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
 			{
 				state = SHOOTING;

@@ -128,14 +128,13 @@ update_status ModulePhysics::PreUpdate()
 			p2List_item<PhysBody*>* element_to_check = world.Elements.getFirst();
 			while (element_to_check != NULL)
 			{
-				if (element_to_check->data->ctype == ColliderType::GROUND && are_colliding(element, element_to_check)) {
-					collision_solver(element, element_to_check);
-				}
-
 				if (are_colliding(element, element_to_check)) {
 					element->data->collisions.add(element_to_check->data->ctype);
 				}
 
+				if (element_to_check->data->ctype == ColliderType::GROUND && are_colliding(element, element_to_check)) {
+					collision_solver(element, element_to_check);
+				}
 				//Next element of the world
 				element_to_check = element_to_check->next;
 			}
