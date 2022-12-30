@@ -121,13 +121,13 @@ update_status Application::Update()
 		physics->dt = clock / 1000.0;
 		break;
 	case DeltaTimeScheme::SEMIFIXED:
-		if (clock < 1.0 / 60.0 * 1000.0) {
-			SDL_Delay((1.0 / 60.0 * 1000.0) - clock);
+		if (clock < 1.0 / App->debug->FPS * 1000.0) {
+			SDL_Delay((1.0 / App->debug->FPS * 1000.0) - clock);
 		}
-		physics->dt = 1.0 / 60.0;
+		physics->dt = 1.0 / App->debug->FPS;
 		break;
 	case DeltaTimeScheme::FIXED:
-		physics->dt = 1.0 / 60.0;
+		physics->dt = 1.0 / App->debug->FPS;
 		break;
 	default:
 

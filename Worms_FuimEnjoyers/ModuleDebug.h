@@ -29,6 +29,7 @@ public:
 	bool pause;
 	bool debug;
 	bool debugSpeed;
+	double FPS;
 
 	DeltaTimeScheme deltaTime;
 

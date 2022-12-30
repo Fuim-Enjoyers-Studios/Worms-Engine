@@ -25,6 +25,7 @@ bool ModuleDebug::Start()
 	debug = true;
 	debugSpeed = false;
 	deltaTime = DeltaTimeScheme::FIXED;
+	FPS = 60;
 
 
 	App->fonts->Load("Assets/Fonts/sprite_font_red.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ ", 6);
@@ -185,14 +186,22 @@ update_status ModuleDebug::PostUpdate()
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) {
 		deltaTime = DeltaTimeScheme::FIXED;
-		App->physics->dt = 1 / 60;
+		App->physics->dt = 1 / FPS;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
 		deltaTime = DeltaTimeScheme::VARIABLE;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
 		deltaTime = DeltaTimeScheme::SEMIFIXED;
-		App->physics->dt = 1 / 60;
+		App->physics->dt = 1 / FPS;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) {
+		if (FPS == 120) {
+			FPS = 60;
+		}
+		else if (FPS == 60) {
+			FPS = 120;
+		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
 		if (pause) { pause = false; }
@@ -237,21 +246,39 @@ update_status ModuleDebug::PostUpdate()
 	else {
 		App->fonts->BlitText(20, 120, 0, "f7 debug player speed: disabled");
 	}
+	switch (App->debug->deltaTime)
+	{
+	case DeltaTimeScheme::VARIABLE:
+		App->fonts->BlitText(20, 140, 0, "f8 deltatime fixed: disabled");
+		App->fonts->BlitText(20, 160, 0, "f9 deltatime variable: enabled");
+		App->fonts->BlitText(20, 180, 0, "f10 deltatime semifixed: disabled");
+		break;
+	case DeltaTimeScheme::SEMIFIXED:
+		App->fonts->BlitText(20, 140, 0, "f8 deltatime fixed: disabled");
+		App->fonts->BlitText(20, 160, 0, "f9 deltatime variable: disabled");
+		App->fonts->BlitText(20, 180, 0, "f10 deltatime semifixed: enabled");
+		break;
+	case DeltaTimeScheme::FIXED:
+		App->fonts->BlitText(20, 140, 0, "f8 deltatime fixed: enabled");
+		App->fonts->BlitText(20, 160, 0, "f9 deltatime variable: disabled");
+		App->fonts->BlitText(20, 180, 0, "f10 deltatime semifixed: disabled");
+		break;
+	default:
+		break;
+	}
 	if (pause) {
-		App->fonts->BlitText(20, 180, 0, "p pause: enabled");
+		App->fonts->BlitText(20, 240, 0, "p pause: enabled");
 	}
 	else {
-		App->fonts->BlitText(20, 180, 0, "p pause: disabled");
+		App->fonts->BlitText(20, 240, 0, "p pause: disabled");
 	}
-	
-
 	sprintf_s(radiusText, 4, "%d", App->scene_intro->actualPlayer->data->getRadius());
-	App->fonts->BlitText(20, 140, 0, "actual player shooting radius: ");
-	App->fonts->BlitText(265, 140,0, radiusText);
+	App->fonts->BlitText(20, 200, 0, "actual player shooting radius: ");
+	App->fonts->BlitText(265, 200,0, radiusText);
 
 	sprintf_s(angleText, 11, "%f", RADTODEG * abs(App->scene_intro->actualPlayer->data->getAngle()));
-	App->fonts->BlitText(20, 160, 0, "actual player shooting angle: ");
-	App->fonts->BlitText(255, 160, 0, angleText);
+	App->fonts->BlitText(20, 220, 0, "actual player shooting angle: ");
+	App->fonts->BlitText(255, 220, 0, angleText);
 	
 	return UPDATE_CONTINUE;
 }
