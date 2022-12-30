@@ -213,5 +213,5 @@ private:
 	void integrator_velocity_verlet(p2List_item<PhysBody*>* element);
 
 	//Collision Solver
-	void ModulePhysics::collision_solver(p2List_item<PhysBody*>* element, p2List_item<PhysBody*>* element_to_check);
+	void collision_solver(p2List_item<PhysBody*>* element, p2List_item<PhysBody*>* element_to_check);
 };

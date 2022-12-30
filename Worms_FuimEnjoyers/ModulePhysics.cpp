@@ -64,13 +64,15 @@ update_status ModulePhysics::PreUpdate()
 			}
 			
 			// Aerodynamic Drag force (only when not in water)
-			//if (!is_colliding_with_water(element))
-			//{
-			//	p2Point<float> dforce;
-			//	dforce.x = 0.0f, dforce.y = 0.0f;
-			//	dforce = compute_aerodynamic_drag(dforce, element);
-			//	element->data->force += dforce; // Add this force to element's total force
-			//}
+			if (!is_colliding_with_water(element))
+			{
+				p2Point<float> dforce;
+				dforce.x = 0.0f, dforce.y = 0.0f;
+				if (App->debug->aerodynamiDragEnabled) {
+					dforce = compute_aerodynamic_drag(dforce, element);
+				}
+				element->data->force += dforce; // Add this force to element's total force
+			}
 
 			// Hydrodynamic forces (only when in water)
 			if (is_colliding_with_water(element))
@@ -84,13 +86,17 @@ update_status ModulePhysics::PreUpdate()
 						// Hydrodynamic Drag force
 						p2Point<float> dforce;
 						dforce.x = 0.0f, dforce.y = 0.0f;
-						dforce = compute_hydrodynamic_drag(dforce, element, element_to_check);
+						if (App->debug->hydrodynamicDragEnabled) {
+							dforce = compute_hydrodynamic_drag(dforce, element, element_to_check);
+						}
 						element->data->force += dforce; // Add this force to ball's total force
 
 						// Hydrodynamic Buoyancy force
 						p2Point<float> bforce;
 						bforce.x = 0.0f, bforce.y = 0.0f;
-						bforce = compute_hydrodynamic_buoyancy(bforce, element, element_to_check);
+						if (App->debug->hydrodynamicBuoyancyEnabled) {
+							bforce = compute_hydrodynamic_buoyancy(bforce, element, element_to_check);
+						}
 						element->data->force += bforce; // Add this force to ball's total force
 					}
 
@@ -351,9 +357,6 @@ float ModulePhysics::modulus(float vx, float vy)
 p2Point<float> ModulePhysics::compute_aerodynamic_drag(p2Point<float> dforce, p2List_item<PhysBody*>* element)
 {
 	//check if is activated by debug
-	if (!App->debug->aerodynamiDragEnabled == true) {
-		return dforce;
-	}
 	float rel_vel[2] = { element->data->velocity.x - world.atmosphere.windx, element->data->velocity.y - world.atmosphere.windy }; // Relative velocity
 	float speed = modulus(rel_vel[0], rel_vel[1]); // Modulus of the relative velocity
 	if (speed != 0) {
@@ -375,9 +378,6 @@ p2Point<float> ModulePhysics::compute_aerodynamic_drag(p2Point<float> dforce, p2
 p2Point<float> ModulePhysics::compute_hydrodynamic_drag(p2Point<float> dforce, p2List_item<PhysBody*>* element, p2List_item<PhysBody*>* water)
 {
 	//check if is activated by debug
-	if (!App->debug->hydrodynamicDragEnabled) {
-		return dforce;
-	}
 	float rel_vel[2] = { element->data->velocity.x - water->data->velocity.x, element->data->velocity.y - water->data->velocity.y }; // Relative velocity
 	float speed = modulus(rel_vel[0], rel_vel[1]); // Modulus of the relative velocity
 	if (speed != 0) {
