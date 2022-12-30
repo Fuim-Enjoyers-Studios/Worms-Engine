@@ -43,21 +43,27 @@ bool ModuleSceneIntro::Start()
 	ground4 = App->physics->CreateRectangle(ground3->position.x + ground3->w, 0.0f, 1.0f, 20.0f, BodyType::STATIC);
 	ground4->ctype = ColliderType::GROUND;
 
+	ground5 = App->physics->CreateRectangle(ground2->w, 7.5f, 15.0f, 1.0f, BodyType::STATIC);
+	ground5->ctype = ColliderType::GROUND;
+
+	ground6 = App->physics->CreateRectangle(-1.0f, -1.0f, ground4->position.x + ground4->w, 1.0f, BodyType::STATIC);
+	ground6->ctype = ColliderType::GROUND;
+
 	//Create entity
 	//creating 1 player
 	Player* player1 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer1.png", { METERS_TO_PIXELS(1.5), METERS_TO_PIXELS(3.5f) });
 	player1->setIndex(1);
 	players.add(player1);
 
-	Player* player2 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer2.png", { METERS_TO_PIXELS(2.5), METERS_TO_PIXELS(3.5f) });
+	Player* player2 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer2.png", { METERS_TO_PIXELS((ground5->position.x + 1.5)), METERS_TO_PIXELS(9.5f) });
 	player2->setIndex(2);
 	players.add(player2);
 
-	Player* player3 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer3.png", { METERS_TO_PIXELS(3.5), METERS_TO_PIXELS(3.5f) });
+	Player* player3 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer3.png", { METERS_TO_PIXELS(((ground5->position.x + ground5->w) - 1.5)), METERS_TO_PIXELS(9.5f) });
 	player3->setIndex(3);
 	players.add(player3);
 
-	Player* player4 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer4.png", { METERS_TO_PIXELS(4.5), METERS_TO_PIXELS(3.5f) });
+	Player* player4 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer4.png", { METERS_TO_PIXELS(((ground3->position.x + ground3->w) - 1.5)), METERS_TO_PIXELS(3.5f) });
 	player4->setIndex(4);
 	players.add(player4);
 
@@ -93,9 +99,10 @@ update_status ModuleSceneIntro::Update()
 	/*if (actualPlayer->data->position.x > 400 / SCREEN_SIZE && actualPlayer->data->position.x < ((SCREEN_HEIGHT * SCREEN_WIDTH) - (METERS_TO_PIXELS((ground4->position.x + ground4->w)) + SCREEN_WIDTH) / SCREEN_SIZE)) {
 		App->renderer->camera.x = ((actualPlayer->data->position.x - 400 / SCREEN_SIZE) * -1) * SCREEN_SIZE;
 	}*/
-	if (actualPlayer->data->getState() != SHOOTING)
+	if (actualPlayer->data->getState() != SHOOTING && !App->debug->debug)
 	{
 		App->renderer->camera.x = ((actualPlayer->data->position.x - 400 / SCREEN_SIZE) * -1) * SCREEN_SIZE;
+		App->renderer->camera.y = 0;
 	}
 
 	/*if (actualPlayer->data->position.y > 300 / SCREEN_SIZE && actualPlayer->data->position.y < ((SCREEN_HEIGHT * SCREEN_WIDTH) - 458 / SCREEN_SIZE)) {

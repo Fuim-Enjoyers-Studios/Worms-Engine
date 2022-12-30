@@ -198,6 +198,14 @@ update_status ModuleDebug::PostUpdate()
 		if (pause) { pause = false; }
 		else if (!pause) { pause = true; }
 	}
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	{
+		App->renderer->camera.y += 10;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		App->renderer->camera.y -= 10;
+	}
 
 	//debug text 
 	App->fonts->BlitText(20, 3, 0, "f1 to deactivate debug menu");

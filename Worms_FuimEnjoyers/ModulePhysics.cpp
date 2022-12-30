@@ -518,7 +518,7 @@ void ModulePhysics::collision_solver(p2List_item<PhysBody*>* element, p2List_ite
 		}
 		else if (((element_to_check->data->position.x + (element_to_check->data->w / 2)) >= (element->data->position.x + (element->data->w / 2))) && ((abs((element->data->position.y) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)) && (abs(((element->data->position.y) + (element->data->h)) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)))) {
 			// TP element to ground right
-			element->data->position.x = element_to_check->data->position.x;
+			element->data->position.x = element_to_check->data->position.x - element->data->w;
 
 			// Elastic bounce with ground
 			element->data->velocity.x = -element->data->velocity.x;
