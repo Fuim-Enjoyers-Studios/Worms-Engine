@@ -40,7 +40,7 @@ bool Projectile::Start() {
 
 bool Projectile::Update()
 {
-	if (App->debug->pause) 
+	if (App->debug->pause)
 	{ return true; }
 
 	pos = { METERS_TO_PIXELS(body->position.x), METERS_TO_PIXELS(body->position.y) };

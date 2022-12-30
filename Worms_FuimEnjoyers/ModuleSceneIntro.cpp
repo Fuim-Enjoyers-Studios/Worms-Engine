@@ -167,20 +167,27 @@ update_status ModuleSceneIntro::Update()
 				actualPlayer = players.getFirst();
 			}
 
-			// AQUI SE DESPAWNEA EL SHOT
 
-			/*p2List_item<Projectile*>* projectileItem = projectiles.getFirst();
-
-			while (projectileItem != NULL)
-			{
-				delete projectileItem->data;
-				projectileItem->data = NULL;
-				projectileItem = projectileItem->next;
-			}*/
+			projectiles.clear();
 		}
 	}
 	App->renderer->Blit(background, 1, -250);
-
-
+	switch (actualPlayer->data->getIndex())
+	{
+	case 1:
+		App->fonts->BlitText(500, 30, 0, "actual player 1");
+		break;
+	case 2:
+		App->fonts->BlitText(500, 30, 0, "actual player 2");
+		break;
+	case 3:
+		App->fonts->BlitText(500, 30, 0, "actual player 3");
+		break;
+	case 4:
+		App->fonts->BlitText(500, 30, 0, "actual player 4");
+		break;
+	default:
+		break;
+	}
 	return UPDATE_CONTINUE;
 }
