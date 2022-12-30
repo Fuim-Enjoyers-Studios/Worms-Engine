@@ -173,7 +173,22 @@ update_status ModuleSceneIntro::Update()
 		}
 	}
 	App->renderer->Blit(background, 1, -250);
-
-
+	switch (actualPlayer->data->getIndex())
+	{
+	case 1:
+		App->fonts->BlitText(500, 30, 0, "actual player 1");
+		break;
+	case 2:
+		App->fonts->BlitText(500, 30, 0, "actual player 2");
+		break;
+	case 3:
+		App->fonts->BlitText(500, 30, 0, "actual player 3");
+		break;
+	case 4:
+		App->fonts->BlitText(500, 30, 0, "actual player 4");
+		break;
+	default:
+		break;
+	}
 	return UPDATE_CONTINUE;
 }
