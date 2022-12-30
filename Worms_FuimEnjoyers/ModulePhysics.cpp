@@ -430,83 +430,107 @@ void ModulePhysics::integrator_velocity_verlet(p2List_item<PhysBody*>* element)
 }
 
 void ModulePhysics::collision_solver(p2List_item<PhysBody*>* element, p2List_item<PhysBody*>* element_to_check) {
-	if (((element_to_check->data->position.y + (element_to_check->data->h / 2)) < (element->data->position.y + (element->data->h / 2))) && ((abs((element->data->position.x) - ((element_to_check->data->position.x) + ((element_to_check->data->w)/2))) < ((element_to_check->data->w) / 2)) && (abs(((element->data->position.x) + (element->data->w)) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)))) {
-		// TP ball to ground surface
-		if (element->data->GetShape() == ShapeType::CIRCLE) {
+	if (element->data->GetShape() == ShapeType::CIRCLE) {
+		if (((element_to_check->data->position.y + (element_to_check->data->h / 2)) < (element->data->position.y + element->data->radius)) && ((abs((element->data->position.x) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)) && (abs((element->data->position.x + element->data->radius) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)))) {
+			// TP element to ground surface
 			element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + element->data->radius;
-		}
-		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
-			element->data->position.y = element_to_check->data->position.y + element_to_check->data->h;
-		}
 
-		// Elastic bounce with ground
-		element->data->velocity.y = -element->data->velocity.y;
+			// Elastic bounce with ground
+			element->data->velocity.y = -element->data->velocity.y;
 
-		// FUYM non-elasticity
-		element->data->velocity.x *= element->data->coef_friction;
-		element->data->velocity.y *= element->data->coef_restitution;
-	}
-	else if (((element_to_check->data->position.y + (element_to_check->data->h / 2)) >= (element->data->position.y + (element->data->h / 2))) && ((abs((element->data->position.x) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)) && (abs(((element->data->position.x) + (element->data->w)) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)))) {
-		// TP ball to ground bottom
-		if (element->data->GetShape() == ShapeType::CIRCLE) {
+			// FUYM non-elasticity
+			element->data->velocity.x *= element->data->coef_friction;
+			element->data->velocity.y *= element->data->coef_restitution;
+		}
+		else if (((element_to_check->data->position.y + (element_to_check->data->h / 2)) >= (element->data->position.y + element->data->radius)) && ((abs((element->data->position.x) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)) && (abs((element->data->position.x + element->data->radius) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)))) {
+			// TP element to ground bottom
 			element->data->position.y = element_to_check->data->position.y - element->data->radius;
 		}
-		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+		else if (((element_to_check->data->position.x + (element_to_check->data->w / 2)) < (element->data->position.x + element->data->radius)) && ((abs((element->data->position.y) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)) && (abs((element->data->position.y + element->data->radius) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)))) {
+			// TP element to ground left
+			element->data->position.x = element_to_check->data->position.x + element_to_check->data->w + element->data->radius;
+
+			// Elastic bounce with ground
+			element->data->velocity.x = -element->data->velocity.x;
+
+			// FUYM non-elasticity
+			element->data->velocity.y *= element->data->coef_friction;
+		}
+		else if (((element_to_check->data->position.x + (element_to_check->data->w / 2)) >= (element->data->position.x + element->data->radius)) && ((abs((element->data->position.y) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)) && (abs((element->data->position.y + element->data->radius) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)))) {
+			// TP element to ground right
+			element->data->position.x = element_to_check->data->position.x - element->data->radius;
+
+			// Elastic bounce with ground
+			element->data->velocity.x = -element->data->velocity.x;
+
+			// FUYM non-elasticity
+			element->data->velocity.y *= element->data->coef_friction;
+		}
+		else if ((element_to_check->data->position.y + (element_to_check->data->h / 2)) < (element->data->position.y + element->data->radius)) {
+			// TP element to ground surface
+			element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + element->data->radius;
+
+			// Elastic bounce with ground
+			element->data->velocity.y = -element->data->velocity.y;
+
+			// FUYM non-elasticity
+			element->data->velocity.x *= element->data->coef_friction;
+			element->data->velocity.y *= element->data->coef_restitution;
+		}
+		else if ((element_to_check->data->position.y + (element_to_check->data->h / 2)) >= (element->data->position.y + element->data->radius)) {
+			// TP element to ground bottom
+			element->data->position.y = element_to_check->data->position.y - element->data->radius;
+		}
+	}
+	else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+		if (((element_to_check->data->position.y + (element_to_check->data->h / 2)) < (element->data->position.y + (element->data->h / 2))) && ((abs((element->data->position.x) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)) && (abs(((element->data->position.x) + (element->data->w)) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)))) {
+			// TP element to ground surface
+			element->data->position.y = element_to_check->data->position.y + element_to_check->data->h;
+
+			// Elastic bounce with ground
+			element->data->velocity.y = -element->data->velocity.y;
+
+			// FUYM non-elasticity
+			element->data->velocity.x *= element->data->coef_friction;
+			element->data->velocity.y *= element->data->coef_restitution;
+		}
+		else if (((element_to_check->data->position.y + (element_to_check->data->h / 2)) >= (element->data->position.y + (element->data->h / 2))) && ((abs((element->data->position.x) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)) && (abs(((element->data->position.x) + (element->data->w)) - ((element_to_check->data->position.x) + ((element_to_check->data->w) / 2))) < ((element_to_check->data->w) / 2)))) {
+			// TP element to ground bottom
 			element->data->position.y = element_to_check->data->position.y - element->data->h;
 		}
-	}
-	else if (((element_to_check->data->position.x + (element_to_check->data->w / 2)) < (element->data->position.x + (element->data->w / 2))) && ((abs((element->data->position.y) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)) && (abs(((element->data->position.y) + (element->data->h)) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)))) {
-		// TP ball to ground left
-		if (element->data->GetShape() == ShapeType::CIRCLE) {
-			element->data->position.x = element_to_check->data->position.x + element_to_check->data->w + element->data->radius;
-		}
-		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+		else if (((element_to_check->data->position.x + (element_to_check->data->w / 2)) < (element->data->position.x + (element->data->w / 2))) && ((abs((element->data->position.y) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)) && (abs(((element->data->position.y) + (element->data->h)) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)))) {
+			// TP element to ground left
 			element->data->position.x = element_to_check->data->position.x + element_to_check->data->w;
-		}
 
-		// Elastic bounce with ground
-		element->data->velocity.x = -element->data->velocity.x;
+			// Elastic bounce with ground
+			element->data->velocity.x = -element->data->velocity.x;
 
-		// FUYM non-elasticity
-		element->data->velocity.y *= element->data->coef_friction;
-	}
-	else if (((element_to_check->data->position.x + (element_to_check->data->w / 2)) >= (element->data->position.x + (element->data->w / 2))) && ((abs((element->data->position.y) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)) && (abs(((element->data->position.y) + (element->data->h)) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)))) {
-		// TP ball to ground right
-		if (element->data->GetShape() == ShapeType::CIRCLE) {
-			element->data->position.x = element_to_check->data->position.x - element->data->radius;
+			// FUYM non-elasticity
+			element->data->velocity.y *= element->data->coef_friction;
 		}
-		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+		else if (((element_to_check->data->position.x + (element_to_check->data->w / 2)) >= (element->data->position.x + (element->data->w / 2))) && ((abs((element->data->position.y) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)) && (abs(((element->data->position.y) + (element->data->h)) - ((element_to_check->data->position.y) + ((element_to_check->data->h) / 2))) < ((element_to_check->data->h) / 2)))) {
+			// TP element to ground right
 			element->data->position.x = element_to_check->data->position.x;
-		}
 
-		// Elastic bounce with ground
-		element->data->velocity.x = -element->data->velocity.x;
+			// Elastic bounce with ground
+			element->data->velocity.x = -element->data->velocity.x;
 
-		// FUYM non-elasticity
-		element->data->velocity.y *= element->data->coef_friction;
-	}
-	else if ((element_to_check->data->position.y + (element_to_check->data->h / 2)) < (element->data->position.y + (element->data->h / 2))) {
-		// TP ball to ground surface
-		if (element->data->GetShape() == ShapeType::CIRCLE) {
-			element->data->position.y = element_to_check->data->position.y + element_to_check->data->h + element->data->radius;
+			// FUYM non-elasticity
+			element->data->velocity.y *= element->data->coef_friction;
 		}
-		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+		else if ((element_to_check->data->position.y + (element_to_check->data->h / 2)) < (element->data->position.y + (element->data->h / 2))) {
+			// TP element to ground surface
 			element->data->position.y = element_to_check->data->position.y + element_to_check->data->h;
-		}
 
-		// Elastic bounce with ground
-		element->data->velocity.y = -element->data->velocity.y;
+			// Elastic bounce with ground
+			element->data->velocity.y = -element->data->velocity.y;
 
-		// FUYM non-elasticity
-		element->data->velocity.x *= element->data->coef_friction;
-		element->data->velocity.y *= element->data->coef_restitution;
-	}
-	else if ((element_to_check->data->position.y + (element_to_check->data->h / 2)) >= (element->data->position.y + (element->data->h / 2))) {
-		// TP ball to ground bottom
-		if (element->data->GetShape() == ShapeType::CIRCLE) {
-			element->data->position.y = element_to_check->data->position.y - element->data->radius;
+			// FUYM non-elasticity
+			element->data->velocity.x *= element->data->coef_friction;
+			element->data->velocity.y *= element->data->coef_restitution;
 		}
-		else if (element->data->GetShape() == ShapeType::RECTANGLE) {
+		else if ((element_to_check->data->position.y + (element_to_check->data->h / 2)) >= (element->data->position.y + (element->data->h / 2))) {
+			// TP element to ground bottom
 			element->data->position.y = element_to_check->data->position.y - element->data->h;
 		}
 	}
