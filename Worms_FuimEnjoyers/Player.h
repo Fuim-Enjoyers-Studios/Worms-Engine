@@ -112,12 +112,14 @@ private:
 	int state;
 	bool facing;
 	float speed;
+	float speedJump;
 
 	int rad;
 	float angle;
 
 	bool turn;
 	int index;
+	bool canJump;
 
 };
 
