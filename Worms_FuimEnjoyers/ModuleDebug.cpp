@@ -203,6 +203,14 @@ update_status ModuleDebug::PostUpdate()
 			FPS = 120;
 		}
 	}
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	{
+		App->renderer->camera.y += 10;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		App->renderer->camera.y -= 10;
+	}
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
 		if (pause) { pause = false; }
 		else if (!pause) { pause = true; }

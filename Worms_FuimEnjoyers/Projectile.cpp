@@ -19,8 +19,8 @@ bool Projectile::Start() {
 	float speed = 2.0f;
 	//initilize textures
 	texture = App->textures->Load(texturePath);
-	body = App->physics->CreateCircle( PIXEL_TO_METERS(position.x),
-									   PIXEL_TO_METERS((position.y - h)),
+	body = App->physics->CreateCircle( PIXEL_TO_METERS((position.x + App->scene_intro->actualPlayer->data->angleToPoint(40 , App->scene_intro->actualPlayer->data->getAngle()).x)),
+									   PIXEL_TO_METERS((position.y - h - App->scene_intro->actualPlayer->data->angleToPoint(40, App->scene_intro->actualPlayer->data->getAngle()).y)),
 									   PIXEL_TO_METERS(4,5),
 									   BodyType::DYNAMIC);
 

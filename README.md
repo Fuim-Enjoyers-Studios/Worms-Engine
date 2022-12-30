@@ -1,5 +1,8 @@
 # [_WormsEngine by Fuim Enjoyers_](https://github.com/Fuim-Enjoyers-Studios/Pinball-Game)
 
+# Worms-Engine
+To test our knowledge on fundamental game physics we created a WORMS-like game. The game has at least one player worm that is able to shoot physics-enabled weapons/items to targets.
+
 ## Description
 
 A 2D Worms like game to learn how to create a physics engine. 
@@ -9,11 +12,11 @@ A 2D Worms like game to learn how to create a physics engine.
 - Many physical features like: bouncing, gravity, drag, hydrodynamic and aerodynamic, friction.
 - Shoot the other players and kill them before they kill you, but don't try to swim
 - Only one hp so don't kill yourself
- 
+
 ## Personal Experience
 
 //oye esto os dejo que pongais lo q querais porq yo al final pa la chusta que he hecho tmpoco he tenido muchos problemas, me refiero la mayoria habran suido haciendo las collisions y las fisicas
- 
+
 ## Controls
 
 # Movement

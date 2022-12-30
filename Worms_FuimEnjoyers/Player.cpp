@@ -12,6 +12,7 @@
 #define DYING 4
 #define SHOOTING 5
 #define WAITING 6
+#define WINNING 7
 
 Player::Player(const char* path, iPoint posi) : Entity(EntityType::PLAYER)
 {
@@ -125,8 +126,11 @@ bool Player::Update()
 		case ColliderType::ENTITY:
 			break;
 		case ColliderType::GROUND:
-			state = IDLE;
-			canJump = true;
+			if (state != SHOOTING && state != WAITING && state != DYING && state != WINNING)
+			{
+				state = IDLE;
+				canJump = true;
+			}
 			break;
 		case ColliderType::WATER:
 			if (!App->debug->debug)
@@ -159,7 +163,7 @@ bool Player::Update()
 		speedJump = PIXEL_TO_METERS(200);
 	}
 
-	if (turn)
+	if (turn && state != WINNING)
 	{
 		if (state != DYING && state != SHOOTING && state != WAITING && state != JUMPING)
 		{
@@ -231,6 +235,11 @@ bool Player::Update()
 	case DYING:
 
 		currentAnimation = &DeathAnimation;
+
+		break;
+	case WINNING:
+
+		App->fonts->BlitText(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0, "you win");
 
 		break;
 	case SHOOTING:

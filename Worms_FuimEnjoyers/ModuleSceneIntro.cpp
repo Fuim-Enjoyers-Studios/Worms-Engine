@@ -8,6 +8,7 @@
 #define DYING 4
 #define SHOOTING 5
 #define WAITING 6
+#define WINNING 7
 
 
 
@@ -48,7 +49,7 @@ bool ModuleSceneIntro::Start()
 
 	ground6 = App->physics->CreateRectangle(-1.0f, -1.0f, ground4->position.x + ground4->w, 1.0f, BodyType::STATIC);
 	ground6->ctype = ColliderType::GROUND;
-
+  
 	//Create entity
 	//creating 1 player
 	Player* player1 = (Player*)App->entityManager->CreateEntity(EntityType::PLAYER, "Assets/Textures/spriteplayer1.png", { METERS_TO_PIXELS(1.5), METERS_TO_PIXELS(3.5f) });
@@ -158,6 +159,7 @@ update_status ModuleSceneIntro::Update()
 			actualPlayer->data->endTurn();
 			shot = false;
 			despawnTimer = 0;
+			int i = 0;
 			if (actualPlayer->next != NULL)
 			{
 				actualPlayer = actualPlayer->next;
@@ -165,6 +167,25 @@ update_status ModuleSceneIntro::Update()
 			else
 			{
 				actualPlayer = players.getFirst();
+			}
+			while (actualPlayer->data->getState() == DYING)
+			{
+				i++;
+				if (actualPlayer->next != NULL)
+				{
+					actualPlayer = actualPlayer->next;
+					continue;
+				}
+				else
+				{
+					actualPlayer = players.getFirst();
+					continue;
+				}
+			}
+			if (i > 2) actualPlayer->data->setState(WINNING);
+			if (actualPlayer->data->getState() != WINNING)
+			{
+				actualPlayer->data->setState(IDLE);
 			}
 
 
