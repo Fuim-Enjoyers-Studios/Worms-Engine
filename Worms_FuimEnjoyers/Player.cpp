@@ -123,21 +123,23 @@ bool Player::Update()
 	else {
 		speed = PIXEL_TO_METERS(10);
 	}
-	
-	if (state != DYING && state != SHOOTING)
+
+	if (turn)
 	{
-		//body->velocity = { 0,0 };
-		state = IDLE;
-		DeathAnimation.Reset();
-		//moves player when its alive
-		//error: player is always moving to the right for no reason
-		//to do: in each input it applies the speed, we must write somewhere... 
-		//...what woule be the final velocity, and at the end of the update apply it
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		if (state != DYING && state != SHOOTING)
 		{
-			//body->position.y -= speed;
-			body->velocity.y = speed;
-		}
+			//body->velocity = { 0,0 };
+			state = IDLE;
+			DeathAnimation.Reset();
+			//moves player when its alive
+			//error: player is always moving to the right for no reason
+			//to do: in each input it applies the speed, we must write somewhere... 
+			//...what woule be the final velocity, and at the end of the update apply it
+			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+			{
+				//body->position.y -= speed;
+				body->velocity.y = speed;
+			}
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
 				body->velocity.y = -speed;
@@ -165,11 +167,9 @@ bool Player::Update()
 				state = SHOOTING;
 			}
 		}
-		
 	}
-	
 
-	switch (state)
+    switch (state)
 	{
 	case IDLE:
 

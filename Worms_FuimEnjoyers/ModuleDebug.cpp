@@ -191,7 +191,7 @@ update_status ModuleDebug::PostUpdate()
 	//debug text 
 
 	App->fonts->BlitText(20, 3, 0, "f1 to deactivate debug menu");
-	if (App->scene_intro->player1->getBody()->ArePhysicsEnabled() == true) {
+	if (App->scene_intro->actualPlayer->data->getBody()->ArePhysicsEnabled() == true) {
 		App->fonts->BlitText(20, 20, 0, "f2 player physics: enabled");
 	}
 	else {
