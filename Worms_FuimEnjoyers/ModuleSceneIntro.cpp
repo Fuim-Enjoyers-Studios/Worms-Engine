@@ -56,8 +56,8 @@ bool ModuleSceneIntro::CleanUp()
 		delete projectileItem->data;
 		projectileItem->data = NULL;
 		projectileItem = projectileItem->next;
-	}
-	projectiles.clear();*/
+	}*/
+	projectiles.clear();
 	return true;
 }
 

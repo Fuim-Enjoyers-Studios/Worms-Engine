@@ -20,7 +20,7 @@ bool ModuleSceneMenu::Start()
 {
 	App->audio->PlayMusic("Assets/Audio/MenuTheme.wav");
 	entrysound = App->audio->LoadFx("Assets/Audio/EntryEnter.wav");
-	bgtexture = App->textures->Load("Assets/Textures/quecojones.png");
+	bgtexture = App->textures->Load("Assets/Textures/intro(1).png");
 	enter = App->textures->Load("Assets/Textures/PressEnter.png");
 	entertimer = 0;
 
@@ -55,7 +55,7 @@ update_status ModuleSceneMenu::Update()
 
 update_status ModuleSceneMenu::PostUpdate()
 {
-	App->renderer->Blit(bgtexture,195,0);
+	App->renderer->Blit(bgtexture,0,60);
 	if (entertimer == 70) {
 		entertimer = 0;
 	}
