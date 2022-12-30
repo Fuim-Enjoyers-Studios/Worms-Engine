@@ -16,6 +16,7 @@ Projectile::~Projectile() {
 
 bool Projectile::Start() {
 	int h = 32;
+	float speed = 2.0f;
 	//initilize textures
 	texture = App->textures->Load(texturePath);
 	body = App->physics->CreateCircle( PIXEL_TO_METERS(position.x),
@@ -33,7 +34,7 @@ bool Projectile::Start() {
 
 	body->ctype = ColliderType::SHOT;
 
-	body->SetVelocity(PIXEL_TO_METERS(App->scene_intro->player1->getProjectile().x), (PIXEL_TO_METERS(App->scene_intro->player1->getProjectile().y)));
+	body->SetVelocity(speed * PIXEL_TO_METERS(App->scene_intro->player1->getProjectile().x),speed * -(PIXEL_TO_METERS(App->scene_intro->player1->getProjectile().y)));
 	return true;
 }
 
