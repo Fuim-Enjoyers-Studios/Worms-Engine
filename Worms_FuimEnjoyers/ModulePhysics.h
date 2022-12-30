@@ -72,6 +72,8 @@ public:
 	//Shape RECTANGLE
 	float w, h;
 
+	p2List<ColliderType> collisions;
+
 private:
 	ShapeType stype;
 	bool water = false;
@@ -153,6 +155,7 @@ struct World
 {
 	Atmosphere atmosphere;
 	p2List<PhysBody*> Elements;
+	p2List<PhysBody*> ElementsToDelete;
 };
 
 class ModulePhysics : public Module
@@ -171,6 +174,8 @@ public:
 	PhysBody* CreateWaterRectangle(float pos_x, float pos_y, float w, float h);
 
 	World world;
+
+	void ModulePhysics::DeleteElementOfWorld();
 
 	//Time between frames
 	float dt = 1.0 / 60.0;
