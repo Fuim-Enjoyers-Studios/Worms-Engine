@@ -60,16 +60,20 @@ update_status ModuleDebug::PostUpdate()
 		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
-		gravityEnabled = !gravityEnabled;
+		if (gravityEnabled) { gravityEnabled = false; }
+		else if (!gravityEnabled) { gravityEnabled = true; }
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
-		aerodynamiDragEnabled = !aerodynamiDragEnabled;
+		if (aerodynamiDragEnabled) { aerodynamiDragEnabled = false; }
+		else if (!aerodynamiDragEnabled) { aerodynamiDragEnabled = true; }
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
-		hydrodynamicDragEnabled = !hydrodynamicDragEnabled;
+		if (hydrodynamicDragEnabled) { hydrodynamicDragEnabled = false; }
+		else if (!hydrodynamicDragEnabled) { hydrodynamicDragEnabled = true; }
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
-		hydrodynamicBuoyancyEnabled = !hydrodynamicBuoyancyEnabled;
+		if (hydrodynamicBuoyancyEnabled) { hydrodynamicBuoyancyEnabled = false; }
+		else if (!hydrodynamicBuoyancyEnabled) { hydrodynamicBuoyancyEnabled = true; }
 	}
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
 		if (pause) { pause = false; }
