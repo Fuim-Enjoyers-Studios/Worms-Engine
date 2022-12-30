@@ -45,7 +45,7 @@ public:
 	void UnLoad(int fontIndex);
 
 	// Create a surface from text
-	void BlitText(int x, int y, int fontIndex, const char* text) const;
+	void BlitText(int x, int y, int fontIndex, const char* text, bool useCamera = false) const;
 
 private:
 	// An array to keep track and store all loaded fonts

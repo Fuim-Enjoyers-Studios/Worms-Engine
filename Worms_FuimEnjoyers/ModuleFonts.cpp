@@ -74,7 +74,7 @@ void ModuleFonts::UnLoad(int font_id)
 	}
 }
 
-void ModuleFonts::BlitText(int x, int y, int font_id, const char* text) const
+void ModuleFonts::BlitText(int x, int y, int font_id, const char* text, bool useCamera) const
 {
 	if(text == nullptr || font_id < 0 || font_id >= MAX_FONTS || fonts[font_id].texture == nullptr)
 	{
@@ -107,7 +107,7 @@ void ModuleFonts::BlitText(int x, int y, int font_id, const char* text) const
 		spriteRect.x = spriteRect.w * (charIndex % font->columns);
 		spriteRect.y = spriteRect.h * (charIndex / font->columns);
 
-		App->renderer->Blit(font->texture, x, y, &spriteRect);
+		App->renderer->Blit(font->texture, x, y, &spriteRect,useCamera);
 		// Advance the position where we blit the next character
 		x += spriteRect.w;
 	}
